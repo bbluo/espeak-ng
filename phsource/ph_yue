@@ -12,7 +12,7 @@ endphoneme
 
 phoneme 2   //  tone: rise
   stress
-  Tone(30, 50, envelope/p_rise, NULL)
+  Tone(10, 30, envelope/p_rise, NULL)
 endphoneme
 
 
@@ -119,6 +119,27 @@ phoneme t
   WAV(ustop/t)
 endphoneme
 
+phoneme n
+  vcd alv nas
+  Vowelout f1=2 f2=1500 -300 250  f3=-100 80  rms=20 brk
+  lengthmod 4
+
+  IF KlattSynth THEN
+    Vowelin f1=0 f2=1500 -200 200 f3=0 80
+    FMT(klatt/n)
+  ENDIF
+
+  NextVowelStarts
+    VowelStart(n/n@)
+    VowelStart(n/na)
+    VowelStart(n/ne)
+    VowelStart(n/ni)
+    VowelStart(n/no)
+    VowelStart(n/nu)
+  EndSwitch
+
+  WAV(n/n_new)
+endphoneme
 
 //====================================================
 //  Vowels and Diphtnongs
