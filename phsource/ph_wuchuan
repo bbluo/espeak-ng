@@ -1,4 +1,7 @@
 // Wuchuan dialect phonemes
+// 继承base1基础音素表
+phonemetable wuchuan base1
+
 // Wuchuan-specific tones (10 tones)
 phoneme 1    // 阴平 755 (高平)
   stress
@@ -13,56 +16,6 @@ endphoneme
 phoneme 3    // 阴去 J11 (低平)
   stress
   Tone(11, 11, envelope/p_level, NULL)
-endphoneme
-
-phoneme _1   // 阴平助记符 755 (高平)
-  stress
-  Tone(55, 55, envelope/p_level, NULL)
-endphoneme
-
-phoneme _2   // 阴上助记符 A24 (高降)
-  stress
-  Tone(42, 24, envelope/p_fall, NULL)
-endphoneme
-
-phoneme _3   // 阴去助记符 J11 (低平)
-  stress
-  Tone(11, 11, envelope/p_level, NULL)
-endphoneme
-
-phoneme _4   // 上阴入助记符 14 (高短)
-  stress
-  Tone(14, 14, envelope/p_level, NULL)
-endphoneme
-
-phoneme _5   // 下阴入助记符 J1 (低短)
-  stress
-  Tone(11, 11, envelope/p_level, NULL)
-endphoneme
-
-phoneme _6   // 阳平助记符 144 (中平)
-  stress
-  Tone(44, 44, envelope/p_level, NULL)
-endphoneme
-
-phoneme _7   // 阳上助记符 H33 (中平)
-  stress
-  Tone(33, 33, envelope/p_level, NULL)
-endphoneme
-
-phoneme _8   // 阳去助记符 122 (中降)
-  stress
-  Tone(22, 12, envelope/p_fall, NULL)
-endphoneme
-
-phoneme _9   // 上阳入助记符 13 (中短)
-  stress
-  Tone(13, 13, envelope/p_level, NULL)
-endphoneme
-
-phoneme _0   // 下阳入助记符 12 (低短)
-  stress
-  Tone(12, 12, envelope/p_level, NULL)
 endphoneme
 
 phoneme 4    // 上阴入 14 (高短)
@@ -100,8 +53,8 @@ phoneme 10   // 下阳入 12 (低短)
   Tone(12, 12, envelope/p_level, NULL)
 endphoneme
 
-// 基本辅音音素
-phoneme b
+// 吴川方言特有的浊化声母
+phoneme b    // 古帮母浊化为[b]
   vcd blb stp
   lengthmod 6
   Vowelin f1=2  f2=1000 -50 -100  f3=-200 80
@@ -109,29 +62,7 @@ phoneme b
   WAV(b/b)
 endphoneme
 
-phoneme p
-  vls blb stp
-  lengthmod 2
-  Vowelin  f1=0  f2=1000 -50 -100  f3=-200 80 rms=30
-  Vowelout f1=1  f2=1000 -500 -350  f3=-300 80 rms=22
-  WAV(ustop/p)
-endphoneme
-
-phoneme m
-  vcd blb nas
-  lengthmod 4
-  Vowelout f1=2  f2=1000 -500 -350  f3=-200 80 brk
-  WAV(m/m_)
-endphoneme
-
-phoneme f
-  vls lbd frc
-  lengthmod 2
-  Vowelout f1=0  f2=1000 -500 -350  f3=-200 80
-  WAV(ufric/f)
-endphoneme
-
-phoneme d
+phoneme d    // 古端母浊化为[d]
   vcd alv stp
   lengthmod 5
   Vowelin f1=1  f2=1700 -300 300  f3=-100 80
@@ -139,107 +70,50 @@ phoneme d
   WAV(d/d)
 endphoneme
 
-phoneme t
-  vls alv stp
-  lengthmod 2
-  Vowelin f1=0  f2=1700 -300 300  f3=100 80
-  Vowelout f1=1 f2=1700 -300 250  f3=-100 80  rms=20
-  WAV(ustop/t)
-endphoneme
-
-phoneme n
-  vcd alv nas
-  Vowelout f1=2 f2=1500 -300 250  f3=-100 80  rms=20 brk
-  lengthmod 4
-  WAV(n/n_new)
-endphoneme
-
-phoneme l
-  liquid
-  lengthmod 7
-  Vowelout f1=1  f2=1500 -200 -100  f3=-100 60
-  WAV(l/l)
-endphoneme
-
-phoneme g
-  vcd vel stp
-  lengthmod 5
-  Vowelin f1=2  f2=2300 200 300  f3=-300 80
-  Vowelout f1=2  f2=2300 250 300  f3=-300 80 brk
-  WAV(g/g)
-endphoneme
-
-phoneme k
-  vls vel stp
-  lengthmod 2
-  Vowelin f1=0  f2=2300 200 300  f3=-200 80
-  Vowelout f1=1 f2=2300 300 400  f3=-200 80  rms=20
-  WAV(ustop/k)
-endphoneme
-
-phoneme N
-  vcd vel nas
-  Vowelout f1=3 f2=2300 300 400  f3=-200 80  len=40 rms=20 brk
-  lengthmod 8
-  FMT(nn/nn_)
-endphoneme
-
-phoneme h
-  vls glt apr
-  lengthmod 3
-  Vowelin f1=0  f2=1500 -400 -400  f3=-200 80
-  Vowelout f1=0  f2=1500 -400 -400  f3=-200 60
-  WAV(h/h_)
-endphoneme
-
-phoneme j
-  liquid pal
-  lengthmod 7
-  Vowelin f1=0  f2=2700 400 600  f3=200 70
-  Vowelout f1=2  f2=2700 400 600  f3=200 70 brk
-  WAV(j/j_)
-endphoneme
-
-phoneme w
-  liquid
-  lengthmod 7
-  Vowelin f1=0  f2=1000 -300 -200  f3=-200 80
-  Vowelout f1=2  f2=1000 -500 -300  f3=-300 80
-  WAV(w/w)
-endphoneme
-
-// 基本元音音素
-phoneme a
+// 吴川方言特有的元音音素
+phoneme â    // [ɐ] 央低元音（带声调符号）
   vwl starttype #a endtype #a
   length 160
-  FMT(vowel/a)
+  FMT(vowel/aa)
 endphoneme
 
-phoneme e
+phoneme ê    // [e] 中前元音（带声调符号）
   vwl starttype #e endtype #e
   length 160
   FMT(vowel/e)
 endphoneme
 
-phoneme i
+phoneme í    // [i] 高前元音（带声调符号）
   vwl starttype #i endtype #i
   length 160
   FMT(vowel/i)
 endphoneme
 
-phoneme o
-  vwl starttype #o endtype #o
+phoneme α    // [a] 低央元音（希腊字母）
+  vwl starttype #a endtype #a
   length 160
-  FMT(vowel/o)
+  FMT(vowel/a)
 endphoneme
 
-phoneme u
+phoneme è    // [e] 中前元音（重音符号）
+  vwl starttype #e endtype #e
+  length 160
+  FMT(vowel/e)
+endphoneme
+
+phoneme ú    // [u] 高后元音（带声调符号）
   vwl starttype #u endtype #u
   length 160
   FMT(vowel/u)
 endphoneme
 
-// 添加wuchuan_rules中使用的音素
+phoneme y    // [y] 圆唇前高元音
+  vwl starttype #i endtype #i
+  length 160
+  FMT(vowel/y)
+endphoneme
+
+// 吴川方言特有的辅音音素变体
 phoneme A    // [ɐ] 央低元音
   vwl starttype #a endtype #a
   length 160
@@ -270,52 +144,81 @@ phoneme U    // [ʊ] 近高后元音
   FMT(vowel/u_2)
 endphoneme
 
-// 添加停顿音素
-phoneme .    // 长停顿
-  pause
-  length 200
+// 为wuchuan_rules添加缺失的音素
+
+// 声调音素 2-9 和 0 (映射到10)
+phoneme 2    // 阴上
+  stress
+  Tone(42, 24, envelope/p_fall, NULL)
 endphoneme
 
-// 添加wuchuan_list中使用的音素
-phoneme â    // [ɐ] 央低元音（带声调符号）
-  vwl starttype #a endtype #a
-  length 160
-  FMT(vowel/aa)
+phoneme 3    // 阴去
+  stress
+  Tone(11, 11, envelope/p_level, NULL)
 endphoneme
 
-phoneme y    // [y] 圆唇前高元音
+phoneme 4    // 阳平
+  stress
+  Tone(21, 21, envelope/p_fall, NULL)
+endphoneme
+
+phoneme 5    // 阳上
+  stress
+  Tone(23, 23, envelope/p_rise, NULL)
+endphoneme
+
+phoneme 6    // 阳去
+  stress
+  Tone(22, 22, envelope/p_level, NULL)
+endphoneme
+
+phoneme 7    // 阴入
+  stress
+  Tone(5, 5, envelope/p_level, NULL)
+endphoneme
+
+phoneme 8    // 中入
+  stress
+  Tone(3, 3, envelope/p_level, NULL)
+endphoneme
+
+phoneme 9    // 阳入
+  stress
+  Tone(2, 2, envelope/p_level, NULL)
+endphoneme
+
+phoneme 0    // 高入 (映射到声调10)
+  stress
+  Tone(12, 12, envelope/p_level, NULL)
+endphoneme
+
+// 复合音素符号
+phoneme I    // 用于复元音中的 [i] 成分
   vwl starttype #i endtype #i
-  length 160
-  FMT(vowel/y)
-endphoneme
-
-// 添加更多wuchuan_list中使用的音素
-phoneme ê    // [e] 中前元音（带声调符号）
-  vwl starttype #e endtype #e
-  length 160
-  FMT(vowel/e)
-endphoneme
-
-phoneme í    // [i] 高前元音（带声调符号）
-  vwl starttype #i endtype #i
-  length 160
+  length 120
   FMT(vowel/i)
 endphoneme
 
-phoneme α    // [a] 低央元音（希腊字母）
+phoneme U    // 用于复元音中的 [u] 成分  
+  vwl starttype #u endtype #u
+  length 120
+  FMT(vowel/u)
+endphoneme
+
+phoneme A    // 用于 â 音的映射
   vwl starttype #a endtype #a
-  length 160
+  length 150
   FMT(vowel/a)
 endphoneme
 
-phoneme è    // [e] 中前元音（重音符号）
+phoneme E    // 用于 e/ê 音的映射
   vwl starttype #e endtype #e
-  length 160
+  length 140
   FMT(vowel/e)
 endphoneme
 
-phoneme ú    // [u] 高后元音（带声调符号）
-  vwl starttype #u endtype #u
-  length 160
-  FMT(vowel/u)
+phoneme O    // 用于 o 音的映射
+  vwl starttype #o endtype #o
+  length 140
+  FMT(vowel/o)
 endphoneme
