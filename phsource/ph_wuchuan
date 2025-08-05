@@ -1,53 +1,103 @@
 // Wuchuan dialect phonemes
 // Wuchuan-specific tones (10 tones)
-phoneme 1    // 阴平
+phoneme 1    // 阴平 755 (高平)
   stress
-  Tone(50, 50, envelope/p_level, NULL)
+  Tone(55, 55, envelope/p_level, NULL)
 endphoneme
 
-phoneme 2    // 阴上
+phoneme 2    // 阴上 A24 (高降)
   stress
-  Tone(10, 30, envelope/p_rise, NULL)
+  Tone(42, 24, envelope/p_fall, NULL)
 endphoneme
 
-phoneme 3    // 阴去
+phoneme 3    // 阴去 J11 (低平)
   stress
-  Tone(30, 30, envelope/p_level, NULL)
+  Tone(11, 11, envelope/p_level, NULL)
 endphoneme
 
-phoneme 4    // 阳平
+phoneme _1   // 阴平助记符 755 (高平)
   stress
-  Tone(20, 10, envelope/p_fall, NULL)
+  Tone(55, 55, envelope/p_level, NULL)
 endphoneme
 
-phoneme 5    // 阳上
+phoneme _2   // 阴上助记符 A24 (高降)
   stress
-  Tone(10, 30, envelope/p_rise, NULL)
+  Tone(42, 24, envelope/p_fall, NULL)
 endphoneme
 
-phoneme 6    // 阳去
+phoneme _3   // 阴去助记符 J11 (低平)
   stress
-  Tone(20, 20, envelope/p_level, NULL)
+  Tone(11, 11, envelope/p_level, NULL)
 endphoneme
 
-phoneme 7    // 阴入
+phoneme _4   // 上阴入助记符 14 (高短)
   stress
-  Tone(50, 30, envelope/p_fall, NULL)
+  Tone(14, 14, envelope/p_level, NULL)
 endphoneme
 
-phoneme 8    // 中入
+phoneme _5   // 下阴入助记符 J1 (低短)
   stress
-  Tone(30, 20, envelope/p_fall, NULL)
+  Tone(11, 11, envelope/p_level, NULL)
 endphoneme
 
-phoneme 9    // 阳入
+phoneme _6   // 阳平助记符 144 (中平)
   stress
-  Tone(20, 10, envelope/p_fall, NULL)
+  Tone(44, 44, envelope/p_level, NULL)
 endphoneme
 
-phoneme 10   // 高入
+phoneme _7   // 阳上助记符 H33 (中平)
   stress
-  Tone(40, 30, envelope/p_fall, NULL)
+  Tone(33, 33, envelope/p_level, NULL)
+endphoneme
+
+phoneme _8   // 阳去助记符 122 (中降)
+  stress
+  Tone(22, 12, envelope/p_fall, NULL)
+endphoneme
+
+phoneme _9   // 上阳入助记符 13 (中短)
+  stress
+  Tone(13, 13, envelope/p_level, NULL)
+endphoneme
+
+phoneme _0   // 下阳入助记符 12 (低短)
+  stress
+  Tone(12, 12, envelope/p_level, NULL)
+endphoneme
+
+phoneme 4    // 上阴入 14 (高短)
+  stress
+  Tone(14, 14, envelope/p_level, NULL)
+endphoneme
+
+phoneme 5    // 下阴入 J1 (低短)
+  stress
+  Tone(11, 11, envelope/p_level, NULL)
+endphoneme
+
+phoneme 6    // 阳平 144 (中平)
+  stress
+  Tone(44, 44, envelope/p_level, NULL)
+endphoneme
+
+phoneme 7    // 阳上 H33 (中平)
+  stress
+  Tone(33, 33, envelope/p_level, NULL)
+endphoneme
+
+phoneme 8    // 阳去 122 (中降)
+  stress
+  Tone(22, 12, envelope/p_fall, NULL)
+endphoneme
+
+phoneme 9    // 上阳入 13 (中短)
+  stress
+  Tone(13, 13, envelope/p_level, NULL)
+endphoneme
+
+phoneme 10   // 下阳入 12 (低短)
+  stress
+  Tone(12, 12, envelope/p_level, NULL)
 endphoneme
 
 // 基本辅音音素

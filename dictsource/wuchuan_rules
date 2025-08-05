@@ -154,13 +154,33 @@
 
 .group
         |        _|
+
+.group 1
         1        1    // 阴平
+
+.group 2
         2        2    // 阴上
+
+.group 3
         3        3    // 阴去
+
+.group 4
         4        4    // 阳平
+
+.group 5
         5        5    // 阳上
+
+.group 6
         6        6    // 阳去
+
+.group 7
         7        7    // 阴入
+
+.group 8
         8        8    // 中入
+
+.group 9
         9        9    // 阳入
+
+.group 0
         0        10   // 高入
