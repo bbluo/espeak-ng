@@ -1,0 +1,166 @@
+// 吴川方言拼写到音素转换规则
+// 基于吴川话拼音方案
+
+// 吴川方言拼写到音素转换规则
+// wuchuan_list中的拼音格式为简单的拼音+数字，无需预处理
+
+.L01 a â e ê o i u    // 元音
+.L02 b p m f d t n l z c s j q x g k h w y ng  // 声母
+
+// 词边界分隔符
+
+.group a
+        a             a     // [a] 低央元音（假蟹摄）
+        ai            aI    // [ai] 复元音（蟹摄）
+        au            aU    // [au] 复元音
+        am            am    // [am] 鼻音韵（咸摄）
+        an            an    // [an] 鼻音韵
+        ang           aN    // [aŋ] 鼻音韵（宕摄）
+        ab            ap    // [ap] 入声韵
+        ag            ak    // [ak] 入声韵
+
+.group â
+        â             A     // [A] 央元音
+        âi            AI    // [Ai] 复元音
+        âu            AU    // [Au] 复元音
+        âm            Am    // [Am] 鼻音韵
+        âng           AN    // [Aŋ] 鼻音韵
+        âb            Ap    // [Ap] 入声韵
+        âg            Ak    // [Ak] 入声韵
+
+.group e
+        e             E     // [ε] 半开前元音（假摄）
+        ei            eI    // [ei] 复元音（蟹止摄）
+        en            @n    // [ən] 鼻音韵
+         
+.group ê
+        ê             E     // [ε] 半开前元音
+         
+.group o
+        o             O     // [ɔ] 半开后元音（果遇摄）
+        ou            oU    // [ou] 复元音
+        ong           oN    // [oŋ] 鼻音韵
+        og            ok    // [ok] 入声韵
+        oai           waI   // [uai] 三合复元音（蟹摄）
+        oau           waU   // [uau] 三合复元音
+        oam           wam   // [uam] 鼻音韵
+        oang          waN   // [uaŋ] 鼻音韵
+        oab           wap   // [uap] 入声韵
+        oag           wak   // [uak] 入声韵
+
+.group i
+        i             i     // [i] 高前元音（止摄）
+        iu            iU    // [iu] 复元音
+        im            im    // [im] 鼻音韵
+        ing           iN    // [iŋ] 鼻音韵
+        ik            ik    // [ik] 入声韵
+        iam           iam   // [iam] 三合复元音
+        iang          iaN   // [iaŋ] 三合复元音
+        iap           iap   // [iap] 入声韵
+        iak           iak   // [iak] 入声韵
+        iau           iaU   // [iau] 三合复元音
+        in            in    // [in] 鼻音韵
+         
+.group u
+        u             u     // [u] 高后元音（遇摄）
+        ui            uI    // [ui] 复元音
+        un            un    // [un] 鼻音韵
+        ut            ut    // [ut] 入声韵
+        uai           uaI   // [uai] 三合复元音（蟹摄）
+        uau           uaU   // [uau] 三合复元音
+        uam           uam   // [uam] 鼻音韵
+        uang          uaN   // [uaŋ] 鼻音韵
+        uap           uap   // [uap] 入声韵
+        uak           uak   // [uak] 入声韵
+        
+.group @
+        @n            @n    // [ən] 央元音+鼻音
+        @t            @t    // [ət] 央元音+入声
+
+.group b
+        b             b     // [b] 浊塞音（古帮母）
+
+.group p
+        p             p     // [p'] 送气清塞音（古滂并母）
+
+.group m
+        m             m     // [m] 鼻音（古明微帮母）
+
+.group f
+        f             f     // [f] 擦音（古非敷奉晓溪母）
+
+.group d
+        dh            d     // [d] 浊塞音（古端母）
+        d             t
+
+.group t
+        t             th    // [t'] 送气清塞音（古透定母）
+
+.group n
+        nj            J     // [n.] 舌面前鼻音（古日疑母）
+        ng            N     // [ŋ] 鼻音（古疑母）
+        n             n     // [n] 鼻音（古泥母）
+
+.group l
+        l             l     // [l] 边音（古来母）
+
+.group z
+        z             ts    // [ts] 塞擦音（古精母）
+
+.group c
+        c             tsh   // [ts'] 送气塞擦音（古清从邪母）
+
+.group s
+        s             s     // [s] 擦音（古心母）
+
+.group j
+        j             tS    // [tc] 塞擦音（古知庄章母）
+
+.group q
+        q             tSh   // [tc'] 送气塞擦音（古彻澄初崇昌母）
+
+.group x
+        x             S     // [c] 擦音（古崇生书船禅母）
+
+.group r
+        rd            r     // [1] 边擦音
+
+.group y
+        y             j     // [i] 半元音
+
+.group g
+        gu            kw    // [kw] 圆唇软腭塞音（古见母）
+        g             k     // [k] 清塞音（古见母）
+
+.group k
+        ku            kwh   // [k'w] 送气圆唇软腭塞音（古溪群母）
+        k             k     // [k] 清塞音（古溪群见晓母）
+
+.group h
+        hg            '     // ['] 声门塞音（古影母）
+        h             h     // [h] 擦音（古晓匣溪母）
+
+.group w
+        w             w     // [w] 唇齿摩擦音（古影喻匣母）
+
+// 声调处理已移至文件末尾的空group中
+
+// 特殊处理
+.group
+        ed            @t
+        
+// 声调处理
+// 吴川话10个声调系统，直接映射到ph_wuchuan中定义的声调音素
+
+.group
+        |        _|
+        1        1    // 阴平
+        2        2    // 阴上
+        3        3    // 阴去
+        4        4    // 阳平
+        5        5    // 阳上
+        6        6    // 阳去
+        7        7    // 阴入
+        8        8    // 中入
+        9        9    // 阳入
+        0        10   // 高入

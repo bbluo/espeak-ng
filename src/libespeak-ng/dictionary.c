@@ -506,8 +506,9 @@ char *WritePhMnemonic(char *phon_out, PHONEME_TAB *ph, PHONEME_LIST *plist, int 
 				break; // # is subscript-h, but only for consonants
 
 			// ignore digits after the first character
-			if (!first && IsDigit09(c))
-				continue;
+			// Commented out to allow tone numbers to be displayed
+			// if (!first && IsDigit09(c))
+			//	continue;
 
 			if ((c >= 0x20) && (c < 128))
 				c = ipa1[c-0x20];

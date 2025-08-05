@@ -234,3 +234,4 @@ espeak-ng-data/mbrola_ph/*_phtrans
 share/
 lib/
 include/
+.DS_store

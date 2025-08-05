@@ -563,6 +563,7 @@ dictionaries: \
 	espeak-ng-data/ur_dict \
 	espeak-ng-data/uz_dict \
 	espeak-ng-data/vi_dict \
+	espeak-ng-data/wuchuan_dict \
 	espeak-ng-data/xex_dict \
 	espeak-ng-data/yue_dict
 
@@ -961,6 +962,13 @@ espeak-ng-data/cmn_dict: dictsource/cmn_list dictsource/cmn_rules dictsource/cmn
 else
 espeak-ng-data/cmn_dict: dictsource/cmn_list dictsource/cmn_rules dictsource/cmn_extra dictsource/cmn_emoji
 endif
+
+wuchuan: espeak-ng-data/wuchuan_dict
+
+espeak-ng-data/wuchuan_dict: src/espeak-ng phsource/phonemes.stamp dictsource/wuchuan_list dictsource/wuchuan_rules dictsource/wuchuan_extra
+	@echo "  DICT      $@"
+	rm -f $@
+	cd dictsource && ESPEAK_DATA_PATH=$(CURDIR) LD_LIBRARY_PATH=../src:${LD_LIBRARY_PATH} ../src/espeak-ng --compile=wuchuan && cd ..
 
 yue: espeak-ng-data/yue_dict
 dictsource/yue_listx:

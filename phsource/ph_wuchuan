@@ -1,0 +1,271 @@
+// Wuchuan dialect phonemes
+// Wuchuan-specific tones (10 tones)
+phoneme 1    // 阴平
+  stress
+  Tone(50, 50, envelope/p_level, NULL)
+endphoneme
+
+phoneme 2    // 阴上
+  stress
+  Tone(10, 30, envelope/p_rise, NULL)
+endphoneme
+
+phoneme 3    // 阴去
+  stress
+  Tone(30, 30, envelope/p_level, NULL)
+endphoneme
+
+phoneme 4    // 阳平
+  stress
+  Tone(20, 10, envelope/p_fall, NULL)
+endphoneme
+
+phoneme 5    // 阳上
+  stress
+  Tone(10, 30, envelope/p_rise, NULL)
+endphoneme
+
+phoneme 6    // 阳去
+  stress
+  Tone(20, 20, envelope/p_level, NULL)
+endphoneme
+
+phoneme 7    // 阴入
+  stress
+  Tone(50, 30, envelope/p_fall, NULL)
+endphoneme
+
+phoneme 8    // 中入
+  stress
+  Tone(30, 20, envelope/p_fall, NULL)
+endphoneme
+
+phoneme 9    // 阳入
+  stress
+  Tone(20, 10, envelope/p_fall, NULL)
+endphoneme
+
+phoneme 10   // 高入
+  stress
+  Tone(40, 30, envelope/p_fall, NULL)
+endphoneme
+
+// 基本辅音音素
+phoneme b
+  vcd blb stp
+  lengthmod 6
+  Vowelin f1=2  f2=1000 -50 -100  f3=-200 80
+  Vowelout f1=2  f2=1000 -500 -300  f3=-300 80 brk
+  WAV(b/b)
+endphoneme
+
+phoneme p
+  vls blb stp
+  lengthmod 2
+  Vowelin  f1=0  f2=1000 -50 -100  f3=-200 80 rms=30
+  Vowelout f1=1  f2=1000 -500 -350  f3=-300 80 rms=22
+  WAV(ustop/p)
+endphoneme
+
+phoneme m
+  vcd blb nas
+  lengthmod 4
+  Vowelout f1=2  f2=1000 -500 -350  f3=-200 80 brk
+  WAV(m/m_)
+endphoneme
+
+phoneme f
+  vls lbd frc
+  lengthmod 2
+  Vowelout f1=0  f2=1000 -500 -350  f3=-200 80
+  WAV(ufric/f)
+endphoneme
+
+phoneme d
+  vcd alv stp
+  lengthmod 5
+  Vowelin f1=1  f2=1700 -300 300  f3=-100 80
+  Vowelout f1=2 f2=1700 -300 300  f3=-100 80 brk
+  WAV(d/d)
+endphoneme
+
+phoneme t
+  vls alv stp
+  lengthmod 2
+  Vowelin f1=0  f2=1700 -300 300  f3=100 80
+  Vowelout f1=1 f2=1700 -300 250  f3=-100 80  rms=20
+  WAV(ustop/t)
+endphoneme
+
+phoneme n
+  vcd alv nas
+  Vowelout f1=2 f2=1500 -300 250  f3=-100 80  rms=20 brk
+  lengthmod 4
+  WAV(n/n_new)
+endphoneme
+
+phoneme l
+  liquid
+  lengthmod 7
+  Vowelout f1=1  f2=1500 -200 -100  f3=-100 60
+  WAV(l/l)
+endphoneme
+
+phoneme g
+  vcd vel stp
+  lengthmod 5
+  Vowelin f1=2  f2=2300 200 300  f3=-300 80
+  Vowelout f1=2  f2=2300 250 300  f3=-300 80 brk
+  WAV(g/g)
+endphoneme
+
+phoneme k
+  vls vel stp
+  lengthmod 2
+  Vowelin f1=0  f2=2300 200 300  f3=-200 80
+  Vowelout f1=1 f2=2300 300 400  f3=-200 80  rms=20
+  WAV(ustop/k)
+endphoneme
+
+phoneme N
+  vcd vel nas
+  Vowelout f1=3 f2=2300 300 400  f3=-200 80  len=40 rms=20 brk
+  lengthmod 8
+  FMT(nn/nn_)
+endphoneme
+
+phoneme h
+  vls glt apr
+  lengthmod 3
+  Vowelin f1=0  f2=1500 -400 -400  f3=-200 80
+  Vowelout f1=0  f2=1500 -400 -400  f3=-200 60
+  WAV(h/h_)
+endphoneme
+
+phoneme j
+  liquid pal
+  lengthmod 7
+  Vowelin f1=0  f2=2700 400 600  f3=200 70
+  Vowelout f1=2  f2=2700 400 600  f3=200 70 brk
+  WAV(j/j_)
+endphoneme
+
+phoneme w
+  liquid
+  lengthmod 7
+  Vowelin f1=0  f2=1000 -300 -200  f3=-200 80
+  Vowelout f1=2  f2=1000 -500 -300  f3=-300 80
+  WAV(w/w)
+endphoneme
+
+// 基本元音音素
+phoneme a
+  vwl starttype #a endtype #a
+  length 160
+  FMT(vowel/a)
+endphoneme
+
+phoneme e
+  vwl starttype #e endtype #e
+  length 160
+  FMT(vowel/e)
+endphoneme
+
+phoneme i
+  vwl starttype #i endtype #i
+  length 160
+  FMT(vowel/i)
+endphoneme
+
+phoneme o
+  vwl starttype #o endtype #o
+  length 160
+  FMT(vowel/o)
+endphoneme
+
+phoneme u
+  vwl starttype #u endtype #u
+  length 160
+  FMT(vowel/u)
+endphoneme
+
+// 添加wuchuan_rules中使用的音素
+phoneme A    // [ɐ] 央低元音
+  vwl starttype #a endtype #a
+  length 160
+  FMT(vowel/aa)
+endphoneme
+
+phoneme E    // [ɛ] 半开前元音
+  vwl starttype #e endtype #e
+  length 160
+  FMT(vowel/e_mid)
+endphoneme
+
+phoneme O    // [ɔ] 半开后元音
+  vwl starttype #o endtype #o
+  length 160
+  FMT(vowel/oo)
+endphoneme
+
+phoneme I    // [ɪ] 近高前元音
+  vwl starttype #i endtype #i
+  length 140
+  FMT(vowel/i_2)
+endphoneme
+
+phoneme U    // [ʊ] 近高后元音
+  vwl starttype #u endtype #u
+  length 140
+  FMT(vowel/u_2)
+endphoneme
+
+// 添加停顿音素
+phoneme .    // 长停顿
+  pause
+  length 200
+endphoneme
+
+// 添加wuchuan_list中使用的音素
+phoneme â    // [ɐ] 央低元音（带声调符号）
+  vwl starttype #a endtype #a
+  length 160
+  FMT(vowel/aa)
+endphoneme
+
+phoneme y    // [y] 圆唇前高元音
+  vwl starttype #i endtype #i
+  length 160
+  FMT(vowel/y)
+endphoneme
+
+// 添加更多wuchuan_list中使用的音素
+phoneme ê    // [e] 中前元音（带声调符号）
+  vwl starttype #e endtype #e
+  length 160
+  FMT(vowel/e)
+endphoneme
+
+phoneme í    // [i] 高前元音（带声调符号）
+  vwl starttype #i endtype #i
+  length 160
+  FMT(vowel/i)
+endphoneme
+
+phoneme α    // [a] 低央元音（希腊字母）
+  vwl starttype #a endtype #a
+  length 160
+  FMT(vowel/a)
+endphoneme
+
+phoneme è    // [e] 中前元音（重音符号）
+  vwl starttype #e endtype #e
+  length 160
+  FMT(vowel/e)
+endphoneme
+
+phoneme ú    // [u] 高后元音（带声调符号）
+  vwl starttype #u endtype #u
+  length 160
+  FMT(vowel/u)
+endphoneme

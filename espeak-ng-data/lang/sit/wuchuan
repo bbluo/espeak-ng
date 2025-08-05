@@ -1,0 +1,13 @@
+name Chinese (Wuchuan)
+language wuchuan
+language zh-wuchuan
+language zh 9
+
+phonemes wuchuan
+dictionary wuchuan
+
+// interpret English letters as 1=English words, 2=wuchuan romanization
+dictrules 1
+
+words 1
+dict_min 10000
