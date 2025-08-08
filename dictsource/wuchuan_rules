@@ -2,8 +2,9 @@
 // 基于吴川话拼音方案（声调表.txt）
 // 已根据声调表.txt中的声母表和韵母表进行修正
 // 删除了多余的声母韵母规则，确保使用正确的注音
+// 音素映射已根据声调表中吴川话与广州话的对应关系进行调整
 
-.L01 a â e ê o i u    // 元音
+.L01 a â e o i u ê    // 元音
 .L02 b p m f dh d t n l z c s j q nj x rd y g k ng h gu ku w hg  // 声母
 
 // 注意：以下韵母规则需要根据声调表.txt中的实际拼音方案进行验证和调整
@@ -28,10 +29,12 @@
         âg            Ak    // 忽 [Ak] - 韵母表中为âg，但实际音标是[æk]
 
 .group e
-        ê             E     // 车 [ε] - 韵母表中的ê
         ei            eI    // 医 [ei]
         en            @n    // 英 [ən]
         ed            @t    // 忆 [ət]
+         
+.group ê
+        ê             E     // 车 [ε] - 韵母表中的ê
          
 .group o
         o             O     // 苛 [ɔ]
@@ -78,8 +81,8 @@
         f             f     // 科 [f]
 
 .group d
-        dh            d     // 多 [d]
-        d             t     // 左 [t]
+        dh            t     // 多 [d] - 根据声调表，吴川话d对应广州话t
+        d             ts    // 左 [t] - 根据声调表，吴川话t对应广州话ts
 
 .group t
         t             th    // 拖 [t']
@@ -102,10 +105,10 @@
         s             s     // 梳 [s]
 
 .group j
-        j             tS    // 知 [tc]
+        j             ts    // 知 [tc] - 根据声调表，吴川话ts对应广州话ts
 
 .group q
-        q             tSh   // 痴 [tc']
+        q             tsh   // 痴 [tc'] - 根据声调表，吴川话ts'对应广州话ts'
 
 .group x
         x             S     // 诗 [c]

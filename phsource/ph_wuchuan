@@ -1,5 +1,7 @@
 // Wuchuan dialect phonemes
 // 继承base1基础音素表
+// 已根据wuchuan_rules文件的音素映射修正进行更新
+// 主要修正：dh→t, d→ts, j→ts, q→tsh
 phonemetable wuchuan base1
 
 // Wuchuan-specific tones (10 tones)
@@ -62,7 +64,7 @@ phoneme b    // 古帮母浊化为[b]
   WAV(b/b)
 endphoneme
 
-phoneme d    // 古端母浊化为[d]
+phoneme d    // 古端母浊化为[d] - 对应wuchuan_rules中的dh
   vcd alv stp
   lengthmod 5
   Vowelin f1=1  f2=1700 -300 300  f3=-100 80
@@ -113,112 +115,476 @@ phoneme y    // [y] 圆唇前高元音
   FMT(vowel/y)
 endphoneme
 
-// 吴川方言特有的辅音音素变体
-phoneme A    // [ɐ] 央低元音
+// 基础单元音 (根据wuchuan_rules映射)
+phoneme a    // a -> a
   vwl starttype #a endtype #a
   length 160
-  FMT(vowel/aa)
+  FMT(vowel/a)
 endphoneme
 
-phoneme E    // [ɛ] 半开前元音
+phoneme E    // ê -> E
   vwl starttype #e endtype #e
   length 160
   FMT(vowel/e_mid)
 endphoneme
 
-phoneme O    // [ɔ] 半开后元音
+phoneme O    // o -> O
   vwl starttype #o endtype #o
   length 160
   FMT(vowel/oo)
 endphoneme
 
-phoneme I    // [ɪ] 近高前元音
+phoneme i    // i -> i
   vwl starttype #i endtype #i
-  length 140
-  FMT(vowel/i_2)
-endphoneme
-
-phoneme U    // [ʊ] 近高后元音
-  vwl starttype #u endtype #u
-  length 140
-  FMT(vowel/u_2)
-endphoneme
-
-// 为wuchuan_rules添加缺失的音素
-
-// 声调音素 2-9 和 0 (映射到10)
-phoneme 2    // 阴上
-  stress
-  Tone(42, 24, envelope/p_fall, NULL)
-endphoneme
-
-phoneme 3    // 阴去
-  stress
-  Tone(11, 11, envelope/p_level, NULL)
-endphoneme
-
-phoneme 4    // 阳平
-  stress
-  Tone(21, 21, envelope/p_fall, NULL)
-endphoneme
-
-phoneme 5    // 阳上
-  stress
-  Tone(23, 23, envelope/p_rise, NULL)
-endphoneme
-
-phoneme 6    // 阳去
-  stress
-  Tone(22, 22, envelope/p_level, NULL)
-endphoneme
-
-phoneme 7    // 阴入
-  stress
-  Tone(5, 5, envelope/p_level, NULL)
-endphoneme
-
-phoneme 8    // 中入
-  stress
-  Tone(3, 3, envelope/p_level, NULL)
-endphoneme
-
-phoneme 9    // 阳入
-  stress
-  Tone(2, 2, envelope/p_level, NULL)
-endphoneme
-
-phoneme 0    // 高入 (映射到声调10)
-  stress
-  Tone(12, 12, envelope/p_level, NULL)
-endphoneme
-
-// 复合音素符号
-phoneme I    // 用于复元音中的 [i] 成分
-  vwl starttype #i endtype #i
-  length 120
+  length 160
   FMT(vowel/i)
 endphoneme
 
-phoneme U    // 用于复元音中的 [u] 成分  
+phoneme u    // u -> u
   vwl starttype #u endtype #u
-  length 120
+  length 160
   FMT(vowel/u)
 endphoneme
 
-phoneme A    // 用于 â 音的映射
-  vwl starttype #a endtype #a
-  length 150
-  FMT(vowel/a)
+// 根据wuchuan_rules添加缺失的音素
+
+// 复合韵母音素 (根据wuchuan_rules映射)
+phoneme aI   // ai -> aI
+  vwl starttype #a endtype #i
+  length 200
+  FMT(vdiph/ai)
 endphoneme
 
-phoneme E    // 用于 e/ê 音的映射
-  vwl starttype #e endtype #e
-  length 140
-  FMT(vowel/e)
+phoneme aU   // au -> aU
+  vwl starttype #a endtype #u
+  length 200
+  FMT(vdiph/au)
 endphoneme
 
-phoneme O    // 用于 o 音的映射
-  vwl starttype #o endtype #o
+phoneme aN   // ang -> aN
+  vwl starttype #a endtype #@
+  length 180
+  FMT(vowel/a_n)
+endphoneme
+
+phoneme AI   // âi -> AI
+  vwl starttype #a endtype #i
+  length 200
+  FMT(vdiph/ai_2)
+endphoneme
+
+phoneme AU   // âu -> AU
+  vwl starttype #a endtype #u
+  length 200
+  FMT(vdiph/au_2)
+endphoneme
+
+phoneme AN   // âng -> AN
+  vwl starttype #a endtype #@
+  length 180
+  FMT(vowel/aa_n)
+endphoneme
+
+phoneme eI   // ei -> eI
+  vwl starttype #e endtype #i
+  length 200
+  FMT(vdiph/ei)
+endphoneme
+
+phoneme oU   // ou -> oU
+  vwl starttype #o endtype #u
+  length 200
+  FMT(vdiph/ou)
+endphoneme
+
+phoneme oN   // ong -> oN
+  vwl starttype #o endtype #@
+  length 180
+  FMT(vowel/o_n)
+endphoneme
+
+phoneme iU   // iu -> iU
+  vwl starttype #i endtype #u
+  length 200
+  FMT(vdiph/iu)
+endphoneme
+
+phoneme iN   // ing -> iN
+  vwl starttype #i endtype #@
+  length 180
+  FMT(vowel/i_n)
+endphoneme
+
+phoneme uI   // ui -> uI
+  vwl starttype #u endtype #i
+  length 200
+  FMT(vdiph/ui)
+endphoneme
+
+phoneme uaN  // uang -> uaN
+  vwl starttype #u endtype #@
+  length 200
+  FMT(vowel/ua_n)
+endphoneme
+
+// 鼻音韵母
+phoneme am   // am
+  vwl starttype #a endtype #@
+  length 180
+  FMT(vowel/a_m)
+endphoneme
+
+phoneme Am   // âm -> Am
+  vwl starttype #a endtype #@
+  length 180
+  FMT(vowel/aa_m)
+endphoneme
+
+phoneme @n   // en -> @n
+  vwl starttype #@ endtype #@
+  length 180
+  FMT(vowel/@_n)
+endphoneme
+
+phoneme im   // im
+  vwl starttype #i endtype #@
+  length 180
+  FMT(vowel/i_m)
+endphoneme
+
+phoneme un   // un
+  vwl starttype #u endtype #@
+  length 180
+  FMT(vowel/u_n)
+endphoneme
+
+// 入声韵母
+phoneme ap   // ab -> ap
+  vwl starttype #a endtype #@
+  length 120
+  FMT(vowel/a_)
+endphoneme
+
+phoneme ak   // ag -> ak
+  vwl starttype #a endtype #@
+  length 120
+  FMT(vowel/a_)
+endphoneme
+
+phoneme Ap   // âb -> Ap
+  vwl starttype #a endtype #@
+  length 120
+  FMT(vowel/aa_)
+endphoneme
+
+phoneme Ak   // âg -> Ak
+  vwl starttype #a endtype #@
+  length 120
+  FMT(vowel/aa_)
+endphoneme
+
+phoneme @t   // ed -> @t
+  vwl starttype #@ endtype #@
+  length 120
+  FMT(vowel/@_)
+endphoneme
+
+phoneme ok   // og -> ok
+  vwl starttype #o endtype #@
+  length 120
+  FMT(vowel/o_)
+endphoneme
+
+phoneme ip   // ib -> ip
+  vwl starttype #i endtype #@
+  length 120
+  FMT(vowel/i_)
+endphoneme
+
+phoneme ik   // ig -> ik
+  vwl starttype #i endtype #@
+  length 120
+  FMT(vowel/i_)
+endphoneme
+
+phoneme ut   // ud -> ut
+  vwl starttype #u endtype #@
+  length 120
+  FMT(vowel/u_)
+endphoneme
+
+// 声母音素 (根据wuchuan_rules映射)
+phoneme ph   // p -> ph
+  vls blb stp asp
+  lengthmod 2
+  Vowelin f1=0  f2=1000 -50 -100  f3=-200 80
+  Vowelout f1=0  f2=1000 -500 -350  f3=-300 80 rms=30
+  WAV(p/p_asp)
+endphoneme
+
+phoneme th   // t -> th
+  vls alv stp asp
+  lengthmod 2
+  Vowelin f1=0  f2=1700 -300 300  f3=-100 80
+  Vowelout f1=0 f2=1700 -300 250  f3=-100 80  rms=20
+  WAV(t/t_asp)
+endphoneme
+
+phoneme ts   // z -> ts, d -> ts, j -> ts (根据wuchuan_rules修正)
+  vls alv afr sib
+  lengthmod 2
+  Vowelin f1=0  f2=1700 -300 300  f3=-100 80
+  Vowelout f1=0 f2=1700 -300 250  f3=-100 80  rms=20
+  WAV(z/ts)
+endphoneme
+
+phoneme tsh  // c -> tsh, q -> tsh (根据wuchuan_rules修正)
+  vls alv afr sib asp
+  lengthmod 2
+  Vowelin f1=0  f2=1700 -300 300  f3=-100 80
+  Vowelout f1=0 f2=1700 -300 250  f3=-100 80  rms=20
+  WAV(z/ts_asp)
+endphoneme
+
+// 注释：根据wuchuan_rules修正，j和q现在映射到ts和tsh，不再使用tS和tSh
+// phoneme tS 和 phoneme tSh 已删除
+
+phoneme S    // x -> S
+  vls pla frc sib
+  lengthmod 3
+  Vowelin f1=0  f2=2100 100 300  f3=100 80
+  Vowelout f1=0 f2=2100 100 300  f3=100 80
+  WAV(s/S)
+endphoneme
+
+phoneme kh   // k -> kh
+  vls vel stp asp
+  lengthmod 2
+  Vowelin f1=0  f2=2300 200 300  f3=-200 80
+  Vowelout f1=0 f2=2300 300 400  f3=-200 80  rms=20
+  WAV(k/k_asp)
+endphoneme
+
+phoneme kw   // gu -> kw
+  vls vel stp
+  lengthmod 2
+  Vowelin f1=0  f2=2300 200 300  f3=-200 80
+  Vowelout f1=0 f2=2300 300 400  f3=-200 80  rms=20
+  WAV(k/kw)
+endphoneme
+
+phoneme kwh  // ku -> kwh
+  vls vel stp asp
+  lengthmod 2
+  Vowelin f1=0  f2=2300 200 300  f3=-200 80
+  Vowelout f1=0 f2=2300 300 400  f3=-200 80  rms=20
+  WAV(k/kw_asp)
+endphoneme
+
+phoneme J    // nj -> J
+  vcd pla nas
+  lengthmod 4
+  Vowelin f1=2  f2=2300 250 300  f3=100 80  amp=10
+  Vowelout f1=2  f2=2300 250 300  f3=100 80  amp=10
+  WAV(n/nj)
+endphoneme
+
+phoneme N    // ng -> N
+  vcd vel nas
+  lengthmod 4
+  Vowelin f1=2  f2=2300 250 300  f3=100 80  amp=10
+  Vowelout f1=2  f2=2300 250 300  f3=100 80  amp=10
+  WAV(n/ng)
+endphoneme
+
+phoneme r    // rd -> r
+  vcd alv apr
+  lengthmod 6
+  Vowelin f1=3  f2=1600 -300 300  f3=-300 80
+  Vowelout f1=3 f2=1600 -300 300  f3=-300 80
+  WAV(r/r)
+endphoneme
+
+phoneme ?    // hg -> ?
+  vls glt stp
+  lengthmod 1
+  WAV(other/glstop)
+endphoneme
+
+// 基础声母音素 (继承自base1，但需要明确定义)
+phoneme m    // m -> m
+  vcd blb nas
+  lengthmod 4
+  Vowelin f1=2  f2=1000 -300 -200  f3=-200 80  amp=10
+  Vowelout f1=2  f2=1000 -500 -350  f3=-300 80  amp=10
+  WAV(m/m)
+endphoneme
+
+phoneme f    // f -> f
+  vls lbd frc
+  lengthmod 3
+  Vowelin f1=0  f2=1000 -300 -200  f3=-200 80
+  Vowelout f1=0  f2=1000 -500 -350  f3=-300 80
+  WAV(f/f)
+endphoneme
+
+phoneme t    // dh -> t (根据wuchuan_rules修正)
+  vls alv stp
+  lengthmod 2
+  Vowelin f1=0  f2=1700 -300 300  f3=-100 80
+  Vowelout f1=0 f2=1700 -300 250  f3=-100 80  rms=20
+  WAV(t/t)
+endphoneme
+
+phoneme n    // n -> n
+  vcd alv nas
+  lengthmod 4
+  Vowelin f1=2  f2=1500 -300 250  f3=-100 80  amp=10
+  Vowelout f1=2  f2=1500 -300 250  f3=-100 80  amp=10
+  WAV(n/n)
+endphoneme
+
+phoneme l    // l -> l
+  vcd alv lat
+  lengthmod 7
+  Vowelin f1=1  f2=1500 -300 300  f3=-200 80
+  Vowelout f1=1 f2=1500 -300 300  f3=-200 80
+  WAV(l/l)
+endphoneme
+
+phoneme s    // s -> s
+  vls alv frc sib
+  lengthmod 3
+  Vowelin f1=0  f2=1700 -300 300  f3=-100 80
+  Vowelout f1=0 f2=1700 -300 250  f3=-100 80
+  WAV(s/s)
+endphoneme
+
+phoneme j    // y -> j
+  vcd pal apr
+  lengthmod 4
+  Vowelin f1=3  f2=2300 300 400  f3=100 80
+  Vowelout f1=3 f2=2300 300 400  f3=100 80
+  WAV(j/j)
+endphoneme
+
+phoneme k    // g -> k (清塞音)
+  vls vel stp
+  lengthmod 2
+  Vowelin f1=0  f2=2300 200 300  f3=-200 80
+  Vowelout f1=0 f2=2300 300 400  f3=-200 80  rms=20
+  WAV(k/k)
+endphoneme
+
+phoneme h    // h -> h
+  vls glt apr
+  lengthmod 1
+  Vowelin f1=0  f2=1500 -300 300  f3=-200 80
+  Vowelout f1=0 f2=1500 -300 300  f3=-200 80
+  WAV(h/h)
+endphoneme
+
+phoneme w    // w -> w
+  vcd lbv apr
+  lengthmod 4
+  Vowelin f1=0  f2=1000 -300 -200  f3=-200 80
+  Vowelout f1=0 f2=1000 -300 -200  f3=-200 80
+  WAV(w/w)
+endphoneme
+
+// 三合复元音 (根据wuchuan_rules映射)
+phoneme waI  // oai -> waI
+  vwl starttype #u endtype #i
+  length 220
+  FMT(vdiph2/uai)
+endphoneme
+
+phoneme waU  // oau -> waU
+  vwl starttype #u endtype #u
+  length 220
+  FMT(vdiph2/uau)
+endphoneme
+
+phoneme wam  // oam -> wam
+  vwl starttype #u endtype #@
+  length 200
+  FMT(vowel/ua_m)
+endphoneme
+
+phoneme waN  // oang -> waN
+  vwl starttype #u endtype #@
+  length 200
+  FMT(vowel/ua_n)
+endphoneme
+
+phoneme wap  // oab -> wap
+  vwl starttype #u endtype #@
   length 140
-  FMT(vowel/o)
+  FMT(vowel/ua_)
+endphoneme
+
+phoneme wak  // oag -> wak
+  vwl starttype #u endtype #@
+  length 140
+  FMT(vowel/ua_)
+endphoneme
+
+phoneme iam  // iam
+  vwl starttype #i endtype #@
+  length 200
+  FMT(vowel/ia_m)
+endphoneme
+
+phoneme iaN  // iang -> iaN
+  vwl starttype #i endtype #@
+  length 200
+  FMT(vowel/ia_n)
+endphoneme
+
+phoneme iap  // iab -> iap
+  vwl starttype #i endtype #@
+  length 140
+  FMT(vowel/ia_)
+endphoneme
+
+phoneme iak  // iag -> iak
+  vwl starttype #i endtype #@
+  length 140
+  FMT(vowel/ia_)
+endphoneme
+
+phoneme iaU  // iau -> iaU
+  vwl starttype #i endtype #u
+  length 220
+  FMT(vdiph2/iau)
+endphoneme
+
+phoneme uaI  // uai -> uaI
+  vwl starttype #u endtype #i
+  length 220
+  FMT(vdiph2/uai)
+endphoneme
+
+phoneme uaU  // uau -> uaU
+  vwl starttype #u endtype #u
+  length 220
+  FMT(vdiph2/uau)
+endphoneme
+
+phoneme uam  // uam
+  vwl starttype #u endtype #@
+  length 200
+  FMT(vowel/ua_m)
+endphoneme
+
+phoneme uap  // uab -> uap
+  vwl starttype #u endtype #@
+  length 140
+  FMT(vowel/ua_)
+endphoneme
+
+phoneme uak  // uag -> uak
+  vwl starttype #u endtype #@
+  length 140
+  FMT(vowel/ua_)
 endphoneme
