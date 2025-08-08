@@ -8,54 +8,54 @@
 //  声调系统 (10个声调)
 //====================================================
 
-phoneme 1   //  阴平 755
+phoneme 1   //  阴平 55
   stress
-  Tone(75, 55, envelope/p_fall, NULL)
+  Tone(55, 55, envelope/p_level, NULL)
 endphoneme
 
-phoneme 2   //  阴上 A24
+phoneme 2   //  阳平 44
+  stress
+  Tone(44, 44, envelope/p_level, NULL)
+endphoneme
+
+phoneme 3   //  阴上 24
   stress
   Tone(24, 24, envelope/p_level, NULL)
 endphoneme
 
-phoneme 3   //  阴去 J11
-  stress
-  Tone(11, 11, envelope/p_level, NULL)
-endphoneme
-
-phoneme 4   //  上阴入 14
-  stress
-  Tone(14, 14, envelope/p_level, NULL)
-endphoneme
-
-phoneme 5   //  下阴入 J1
-  stress
-  Tone(1, 1, envelope/p_level, NULL)
-endphoneme
-
-phoneme 6   //  阳平 144
-  stress
-  Tone(14, 44, envelope/p_rise, NULL)
-endphoneme
-
-phoneme 7   //  阳上 H33
+phoneme 4   //  阳上 33
   stress
   Tone(33, 33, envelope/p_level, NULL)
 endphoneme
 
-phoneme 8   //  阳去 122
+phoneme 5   //  阴去 11
   stress
-  Tone(12, 22, envelope/p_rise, NULL)
+  Tone(11, 11, envelope/p_level, NULL)
 endphoneme
 
-phoneme 9   //  上阳入 13
+phoneme 6   //  阳去 22
   stress
-  Tone(13, 13, envelope/p_level, NULL)
+  Tone(22, 22, envelope/p_level, NULL)
 endphoneme
 
-phoneme 10  //  下阳入 12
+phoneme 7   //  上阴入 4
   stress
-  Tone(12, 12, envelope/p_level, NULL)
+  Tone(4, 4, envelope/p_level, NULL)
+endphoneme
+
+phoneme 8   //  下阴入 1
+  stress
+  Tone(1, 1, envelope/p_level, NULL)
+endphoneme
+
+phoneme 9   //  上阳入 3
+  stress
+  Tone(3, 3, envelope/p_level, NULL)
+endphoneme
+
+phoneme 10  //  下阳入 2
+  stress
+  Tone(2, 2, envelope/p_level, NULL)
 endphoneme
 
 //====================================================
