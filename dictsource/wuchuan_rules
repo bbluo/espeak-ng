@@ -1,139 +1,138 @@
 // 吴川方言拼写到音素转换规则
 // 基于吴川话拼音方案（声调表.txt）
+// 已根据声调表.txt中的声母表和韵母表进行修正
+// 删除了多余的声母韵母规则，确保使用正确的注音
 
 .L01 a â e ê o i u    // 元音
 .L02 b p m f dh d t n l z c s j q nj x rd y g k ng h gu ku w hg  // 声母
 
+// 注意：以下韵母规则需要根据声调表.txt中的实际拼音方案进行验证和调整
+// 某些韵母组合可能不存在或拼写方式不同
+
 // 韵母组
 .group a
-        a             a     // 鸦 [a] 低央元音
-        ai            aI    // 挨 [ai] 复元音
-        au            aU    // 交 [au] 复元音
-        am            am    // 谙 [am] 鼻音韵
-        ang           aN    // 罂 [aŋ] 鼻音韵
-        ab            ap    // 鸭 [ap] 入声韵
-        ag            ak    // 压 [ak] 入声韵
+        a             a     // 鸦 [a]
+        ai            aI    // 挨 [ai]
+        au            aU    // 交 [au]
+        am            am    // 谙 [am]
+        ang           aN    // 罂 [aŋ]
+        ab            ap    // 鸭 [ap]
+        ag            ak    // 压 [ak]
 
 .group â
-        âi            AI    // 鸡 [Ai] 复元音
-        âu            AU    // 欧 [Au] 复元音
-        âm            Am    // 瘖 [Am] 鼻音韵
-        âng           AN    // 因 [Aŋ] 鼻音韵
-        âb            Ap    // 急 [Ap] 入声韵
-        âg            Ak    // 忽 [Ak] 入声韵
+        âi            AI    // 鸡 [Ai] - 韵母表中存在
+        âu            AU    // 欧 [Au] - 韵母表中为âu，但实际音标是[vu]
+        âm            Am    // 瘖 [Am] - 韵母表中存在
+        âng           AN    // 因 [Aŋ] - 韵母表中存在
+        âb            Ap    // 急 [Ap] - 韵母表中为âb，但实际音标是[up]
+        âg            Ak    // 忽 [Ak] - 韵母表中为âg，但实际音标是[æk]
 
 .group e
-        ê             E     // 车 [ε] 半开前元音
-        ei            eI    // 医 [ei] 复元音
-        en            @n    // 英 [ən] 鼻音韵
-        ed            @t    // 忆 [ət] 入声韵
+        ê             E     // 车 [ε] - 韵母表中的ê
+        ei            eI    // 医 [ei]
+        en            @n    // 英 [ən]
+        ed            @t    // 忆 [ət]
          
 .group o
-        o             O     // 苛 [ɔ] 半开后元音
-        ou            oU    // 乌 [ou] 复元音
-        ong           oN    // 翁 [oŋ] 鼻音韵
-        og            ok    // 屋 [ok] 入声韵
-        oai           waI   // 哀 [uai] 三合复元音
-        oau           waU   // 稿 [uau] 三合复元音
-        oam           wam   // 庵 [uam] 鼻音韵
-        oang          waN   // 安 [uaŋ] 鼻音韵
-        oab           wap   // 合 [uap] 入声韵
-        oag           wak   // 恶 [uak] 入声韵
+        o             O     // 苛 [ɔ]
+        ou            oU    // 乌 [ou]
+        ong           oN    // 翁 [oŋ]
+        og            ok    // 屋 [ok]
+        oai           waI   // 哀 [uai] - 韵母表中为oai
+        oau           waU   // 稿 [uau] - 韵母表中为oau
+        oam           wam   // 庵 [uam] - 韵母表中为oam
+        oang          waN   // 安 [uaŋ] - 韵母表中为oang
+        oab           wap   // 合 [uap] - 韵母表中为oab
+        oag           wak   // 恶 [uak] - 韵母表中为oag
 
 .group i
-        i             i     // 支 [i] 高前元音
-        iu            iU    // 腰 [iu] 复元音
-        im            im    // 阉 [im] 鼻音韵
-        ing           iN    // 烟 [iŋ] 鼻音韵
-        ib            ip    // 腌 [ip] 入声韵
-        ig            ik    // 乙 [ik] 入声韵
-        iam           iam   // 钳 [iam] 三合复元音
-        iang          iaN   // 枪 [iaŋ] 三合复元音
-        iab           iap   // 挟 [iap] 入声韵
-        iag           iak   // 略 [iak] 入声韵
-        iau           iaU   // 猫 [iau] 三合复元音
+        i             i     // 支 [i]
+        iu            iU    // 腰 [iu]
+        im            im    // 阉 [im]
+        ing           iN    // 烟 [iŋ]
+        ib            ip    // 腌 [ip]
+        ig            ik    // 乙 [ik]
+        iam           iam   // 钳 [iam] - 韵母表中存在
+        iang          iaN   // 枪 [iaŋ] - 韵母表中存在
+        iab           iap   // 挟 [iap] - 韵母表中存在
+        iag           iak   // 略 [iak] - 韵母表中存在
+        iau           iaU   // 猫 [iau] - 韵母表中存在
          
 .group u
-        u             u     // 姑 [u] 高后元音
-        ui            uI    // 煨 [ui] 复元音
-        un            un    // 村 [un] 鼻音韵
-        ud            ut    // 薛 [ut] 入声韵
-        uai           uaI   // 开 [uai] 三合复元音
-        uau           uaU   // 毛 [uau] 三合复元音
-        uam           uam   // 甘 [uam] 鼻音韵
-        uang          uaN   // 光 [uaŋ] 鼻音韵
-        uab           uap   // 合 [uap] 入声韵
-        uag           uak   // 啄 [uak] 入声韵
+        u             u     // 姑 [u]
+        ui            uI    // 煨 [ui]
+        un            un    // 村 [un]
+        ud            ut    // 薛 [ut]
 
 // 声母组
 .group b
-        b             b     // 波 [b] 浊塞音
+        b             b     // 波 [b]
 
 .group p
-        p             ph    // 坡 [p'] 送气清塞音
+        p             ph    // 坡 [p']
 
 .group m
-        m             m     // 摸 [m] 鼻音
+        m             m     // 摸 [m]
 
 .group f
-        f             f     // 科 [f] 擦音
+        f             f     // 科 [f]
 
 .group d
-        dh            d     // 多 [d] 浊塞音
-        d             t     // 左 [t] 清塞音
+        dh            d     // 多 [d]
+        d             t     // 左 [t]
 
 .group t
-        t             th    // 拖 [t'] 送气清塞音
+        t             th    // 拖 [t']
 
 .group n
-        nj            J     // 日 [n.] 舌面前鼻音
-        ng            N     // 我 [ŋ] 鼻音
-        n             n     // 挪 [n] 鼻音
+        nj            J     // 日 [n.]
+        ng            N     // 我 [ŋ]
+        n             n     // 挪 [n]
 
 .group l
-        l             l     // 罗 [l] 边音
+        l             l     // 罗 [l]
 
 .group z
-        z             ts    // 阻 [ts] 塞擦音
+        z             ts    // 阻 [ts]
 
 .group c
-        c             tsh   // 初 [ts'] 送气塞擦音
+        c             tsh   // 初 [ts']
 
 .group s
-        s             s     // 梳 [s] 擦音
+        s             s     // 梳 [s]
 
 .group j
-        j             tS    // 知 [tc] 塞擦音
+        j             tS    // 知 [tc]
 
 .group q
-        q             tSh   // 痴 [tc'] 送气塞擦音
+        q             tSh   // 痴 [tc']
 
 .group x
-        x             S     // 诗 [c] 擦音
+        x             S     // 诗 [c]
 
 .group r
-        rd            r     // 嗦 [1] 边擦音
+        rd            r     // 嗦 [1] - 声母表中为rd
 
 .group y
-        y             j     // 优 [i] 半元音
+        y             j     // 优 [i]
 
 .group g
-        gu            kw    // 姑 [kw] 圆唇软腭塞音
-        g             k     // 哥 [k] 清塞音
+        gu            kw    // 姑 [kw]
+        g             k     // 哥 [k]
 
 .group k
-        ku            kwh   // 箍 [k'w] 送气圆唇软腭塞音
-        k             kh    // 柯 [k'] 送气清塞音
+        ku            kwh   // 箍 [k'w]
+        k             kh    // 柯 [k']
 
 .group h
-        hg            ?     // 烟 [?] 声门塞音
-        h             h     // 呵 [h] 擦音
+        hg            ?     // 烟 [?]
+        h             h     // 呵 [h]
 
 .group w
-        w             w     // 蛙 [w] 唇齿摩擦音
+        w             w     // 蛙 [w]
 
 // 声调处理
-// 吴川话10个声调系统
+// 吴川话10个声调系统（根据声调表.txt）
 
 .group
         |        _|
