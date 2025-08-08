@@ -1,186 +1,169 @@
 // 吴川方言拼写到音素转换规则
-// 基于吴川话拼音方案
-
-// 吴川方言拼写到音素转换规则
-// wuchuan_list中的拼音格式为简单的拼音+数字，无需预处理
+// 基于吴川话拼音方案（声调表.txt）
 
 .L01 a â e ê o i u    // 元音
-.L02 b p m f d t n l z c s j q x g k h w y ng  // 声母
+.L02 b p m f dh d t n l z c s j q nj x rd y g k ng h gu ku w hg  // 声母
 
-// 词边界分隔符
-
+// 韵母组
 .group a
-        a             a     // [a] 低央元音（假蟹摄）
-        ai            aI    // [ai] 复元音（蟹摄）
-        au            aU    // [au] 复元音
-        am            am    // [am] 鼻音韵（咸摄）
-        an            an    // [an] 鼻音韵
-        ang           aN    // [aŋ] 鼻音韵（宕摄）
-        ab            ap    // [ap] 入声韵
-        ag            ak    // [ak] 入声韵
+        a             a     // 鸦 [a] 低央元音
+        ai            aI    // 挨 [ai] 复元音
+        au            aU    // 交 [au] 复元音
+        am            am    // 谙 [am] 鼻音韵
+        ang           aN    // 罂 [aŋ] 鼻音韵
+        ab            ap    // 鸭 [ap] 入声韵
+        ag            ak    // 压 [ak] 入声韵
 
 .group â
-        â             A     // [A] 央元音
-        âi            AI    // [Ai] 复元音
-        âu            AU    // [Au] 复元音
-        âm            Am    // [Am] 鼻音韵
-        âng           AN    // [Aŋ] 鼻音韵
-        âb            Ap    // [Ap] 入声韵
-        âg            Ak    // [Ak] 入声韵
+        âi            AI    // 鸡 [Ai] 复元音
+        âu            AU    // 欧 [Au] 复元音
+        âm            Am    // 瘖 [Am] 鼻音韵
+        âng           AN    // 因 [Aŋ] 鼻音韵
+        âb            Ap    // 急 [Ap] 入声韵
+        âg            Ak    // 忽 [Ak] 入声韵
 
 .group e
-        e             E     // [ε] 半开前元音（假摄）
-        ei            eI    // [ei] 复元音（蟹止摄）
-        en            @n    // [ən] 鼻音韵
-         
-.group ê
-        ê             E     // [ε] 半开前元音
+        ê             E     // 车 [ε] 半开前元音
+        ei            eI    // 医 [ei] 复元音
+        en            @n    // 英 [ən] 鼻音韵
+        ed            @t    // 忆 [ət] 入声韵
          
 .group o
-        o             O     // [ɔ] 半开后元音（果遇摄）
-        ou            oU    // [ou] 复元音
-        ong           oN    // [oŋ] 鼻音韵
-        og            ok    // [ok] 入声韵
-        oai           waI   // [uai] 三合复元音（蟹摄）
-        oau           waU   // [uau] 三合复元音
-        oam           wam   // [uam] 鼻音韵
-        oang          waN   // [uaŋ] 鼻音韵
-        oab           wap   // [uap] 入声韵
-        oag           wak   // [uak] 入声韵
+        o             O     // 苛 [ɔ] 半开后元音
+        ou            oU    // 乌 [ou] 复元音
+        ong           oN    // 翁 [oŋ] 鼻音韵
+        og            ok    // 屋 [ok] 入声韵
+        oai           waI   // 哀 [uai] 三合复元音
+        oau           waU   // 稿 [uau] 三合复元音
+        oam           wam   // 庵 [uam] 鼻音韵
+        oang          waN   // 安 [uaŋ] 鼻音韵
+        oab           wap   // 合 [uap] 入声韵
+        oag           wak   // 恶 [uak] 入声韵
 
 .group i
-        i             i     // [i] 高前元音（止摄）
-        iu            iU    // [iu] 复元音
-        im            im    // [im] 鼻音韵
-        ing           iN    // [iŋ] 鼻音韵
-        ik            ik    // [ik] 入声韵
-        iam           iam   // [iam] 三合复元音
-        iang          iaN   // [iaŋ] 三合复元音
-        iap           iap   // [iap] 入声韵
-        iak           iak   // [iak] 入声韵
-        iau           iaU   // [iau] 三合复元音
-        in            in    // [in] 鼻音韵
+        i             i     // 支 [i] 高前元音
+        iu            iU    // 腰 [iu] 复元音
+        im            im    // 阉 [im] 鼻音韵
+        ing           iN    // 烟 [iŋ] 鼻音韵
+        ib            ip    // 腌 [ip] 入声韵
+        ig            ik    // 乙 [ik] 入声韵
+        iam           iam   // 钳 [iam] 三合复元音
+        iang          iaN   // 枪 [iaŋ] 三合复元音
+        iab           iap   // 挟 [iap] 入声韵
+        iag           iak   // 略 [iak] 入声韵
+        iau           iaU   // 猫 [iau] 三合复元音
          
 .group u
-        u             u     // [u] 高后元音（遇摄）
-        ui            uI    // [ui] 复元音
-        un            un    // [un] 鼻音韵
-        ut            ut    // [ut] 入声韵
-        uai           uaI   // [uai] 三合复元音（蟹摄）
-        uau           uaU   // [uau] 三合复元音
-        uam           uam   // [uam] 鼻音韵
-        uang          uaN   // [uaŋ] 鼻音韵
-        uap           uap   // [uap] 入声韵
-        uak           uak   // [uak] 入声韵
-        
-.group @
-        @n            @n    // [ən] 央元音+鼻音
-        @t            @t    // [ət] 央元音+入声
+        u             u     // 姑 [u] 高后元音
+        ui            uI    // 煨 [ui] 复元音
+        un            un    // 村 [un] 鼻音韵
+        ud            ut    // 薛 [ut] 入声韵
+        uai           uaI   // 开 [uai] 三合复元音
+        uau           uaU   // 毛 [uau] 三合复元音
+        uam           uam   // 甘 [uam] 鼻音韵
+        uang          uaN   // 光 [uaŋ] 鼻音韵
+        uab           uap   // 合 [uap] 入声韵
+        uag           uak   // 啄 [uak] 入声韵
 
+// 声母组
 .group b
-        b             b     // [b] 浊塞音（古帮母）
+        b             b     // 波 [b] 浊塞音
 
 .group p
-        p             p     // [p'] 送气清塞音（古滂并母）
+        p             ph    // 坡 [p'] 送气清塞音
 
 .group m
-        m             m     // [m] 鼻音（古明微帮母）
+        m             m     // 摸 [m] 鼻音
 
 .group f
-        f             f     // [f] 擦音（古非敷奉晓溪母）
+        f             f     // 科 [f] 擦音
 
 .group d
-        dh            d     // [d] 浊塞音（古端母）
-        d             t
+        dh            d     // 多 [d] 浊塞音
+        d             t     // 左 [t] 清塞音
 
 .group t
-        t             th    // [t'] 送气清塞音（古透定母）
+        t             th    // 拖 [t'] 送气清塞音
 
 .group n
-        nj            J     // [n.] 舌面前鼻音（古日疑母）
-        ng            N     // [ŋ] 鼻音（古疑母）
-        n             n     // [n] 鼻音（古泥母）
+        nj            J     // 日 [n.] 舌面前鼻音
+        ng            N     // 我 [ŋ] 鼻音
+        n             n     // 挪 [n] 鼻音
 
 .group l
-        l             l     // [l] 边音（古来母）
+        l             l     // 罗 [l] 边音
 
 .group z
-        z             ts    // [ts] 塞擦音（古精母）
+        z             ts    // 阻 [ts] 塞擦音
 
 .group c
-        c             tsh   // [ts'] 送气塞擦音（古清从邪母）
+        c             tsh   // 初 [ts'] 送气塞擦音
 
 .group s
-        s             s     // [s] 擦音（古心母）
+        s             s     // 梳 [s] 擦音
 
 .group j
-        j             tS    // [tc] 塞擦音（古知庄章母）
+        j             tS    // 知 [tc] 塞擦音
 
 .group q
-        q             tSh   // [tc'] 送气塞擦音（古彻澄初崇昌母）
+        q             tSh   // 痴 [tc'] 送气塞擦音
 
 .group x
-        x             S     // [c] 擦音（古崇生书船禅母）
+        x             S     // 诗 [c] 擦音
 
 .group r
-        rd            r     // [1] 边擦音
+        rd            r     // 嗦 [1] 边擦音
 
 .group y
-        y             j     // [i] 半元音
+        y             j     // 优 [i] 半元音
 
 .group g
-        gu            kw    // [kw] 圆唇软腭塞音（古见母）
-        g             k     // [k] 清塞音（古见母）
+        gu            kw    // 姑 [kw] 圆唇软腭塞音
+        g             k     // 哥 [k] 清塞音
 
 .group k
-        ku            kwh   // [k'w] 送气圆唇软腭塞音（古溪群母）
-        k             k     // [k] 清塞音（古溪群见晓母）
+        ku            kwh   // 箍 [k'w] 送气圆唇软腭塞音
+        k             kh    // 柯 [k'] 送气清塞音
 
 .group h
-        hg            '     // ['] 声门塞音（古影母）
-        h             h     // [h] 擦音（古晓匣溪母）
+        hg            ?     // 烟 [?] 声门塞音
+        h             h     // 呵 [h] 擦音
 
 .group w
-        w             w     // [w] 唇齿摩擦音（古影喻匣母）
+        w             w     // 蛙 [w] 唇齿摩擦音
 
-// 声调处理已移至文件末尾的空group中
-
-// 特殊处理
-.group
-        ed            @t
-        
 // 声调处理
-// 吴川话10个声调系统，直接映射到ph_wuchuan中定义的声调音素
+// 吴川话10个声调系统
 
 .group
         |        _|
 
 .group 1
-        1        1    // 阴平
+        1        1    // 阴平 755
 
 .group 2
-        2        2    // 阴上
+        2        2    // 阴上 A24
 
 .group 3
-        3        3    // 阴去
+        3        3    // 阴去 J11
 
 .group 4
-        4        4    // 阳平
+        4        4    // 上阴入 14
 
 .group 5
-        5        5    // 阳上
+        5        5    // 下阴入 J1
 
 .group 6
-        6        6    // 阳去
+        6        6    // 阳平 144
 
 .group 7
-        7        7    // 阴入
+        7        7    // 阳上 H33
 
 .group 8
-        8        8    // 中入
+        8        8    // 阳去 122
 
 .group 9
-        9        9    // 阳入
+        9        9    // 上阳入 13
 
 .group 0
-        0        10   // 高入
+        0        10   // 下阳入 12
