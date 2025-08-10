@@ -834,19 +834,9 @@ static void CalcPitches_Tone(Translator *tr)
 				  }
 				}
 			  }
-			// Wuchuan - keep tones stable, no tone sandhi
-			if (tr->translator_name == L3('w', 'u', 'c')) {
-				if (tone_ph == 0) {
-					tone_ph = PhonemeCode('1'); // default tone 1
-					p->tone_ph = tone_ph;
-				}
-				// Skip all tone sandhi rules for Wuchuan - preserve original tone
-				prev_tph = phoneme_tab[tone_ph];
-				prevw_tph = phoneme_tab[tone_ph];
-				continue;
-			}
+
 			// Mandarin
-			else if (tr->translator_name == L('z', 'h') || tr->translator_name == L3('c', 'm', 'n')) {
+			if (tr->translator_name == L('z', 'h')) {
 				if (tone_ph == 0) {
 					if (pause || tone_promoted) {
 						tone_ph = PhonemeCode2('5', '5'); // no previous vowel, use tone 1

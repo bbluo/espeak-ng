@@ -1632,9 +1632,9 @@ Translator *SelectTranslator(const char *name)
 		tr->langopts.numbers = NUM_DEFAULT;
 		tr->langopts.break_numbers = BREAK_INDIVIDUAL;
 		break;
+	case L3('w', 'u', 'c'): // wuchuan - use same handling as other Chinese variants
 	case L3('c', 'm', 'n'): // no break, just go to 'zh' case
 	case L3('y', 'u', 'e'):
-	case L3('w', 'u', 'c'): // wuchuan (first 3 chars)
 	case L('z','h'):	// zh is used for backwards compatibility. Prefer cmn or yue.
 	{
 		static const short stress_lengths_zh[8] = { 230, 150, 230, 230, 230, 0, 240, 250 }; // 1=tone5. end-of-sentence, 6=tone 1&4, 7=tone 2&3
