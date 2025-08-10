@@ -5,7 +5,8 @@
 // 音素映射已根据声调表中吴川话与广州话的对应关系进行调整
 
 .L01 a â e o i u ê    // 元音
-.L02 b p m f dh d t n l z c s j q nj x rd y g k ng h gu ku w hg  // 声母
+.L02 b p m f dh d t n l z c s j q nj x rd g k ng h gu ku hg  // 声母（不包括半元音y,w）
+.L03 a â e o i u ê ai au am ang ab ag âi âu âm âng âb âg e ei em eng eb eg o oi om ong ob og i iu im ing ib ig u ui um ung ub ug ê êi êm êng êb êg  // 韵母
 
 // 注意：以下韵母规则需要根据声调表.txt中的实际拼音方案进行验证和调整
 // 某些韵母组合可能不存在或拼写方式不同
@@ -81,11 +82,11 @@
         f             f     // 科 [f]
 
 .group d
-        dh            t     // 多 [d] - 根据声调表，吴川话d对应广州话t
-        d             ts    // 左 [t] - 根据声调表，吴川话t对应广州话ts
+        dh            d     // 多 [d] - 根据声调表，吴川话d对应广州话t
+        d             d    // 左 [t] - 根据声调表，吴川话t对应广州话ts
 
 .group t
-        t             th    // 拖 [t']
+        t             t    // 拖 [t']
 
 .group n
         nj            J     // 日 [n.]
@@ -105,7 +106,7 @@
         s             s     // 梳 [s]
 
 .group j
-        j             ts    // 知 [tc] - 根据声调表，吴川话ts对应广州话ts
+        j             j    // 知 [tc] - 根据声调表，吴川话ts对应广州话ts
 
 .group q
         q             tsh   // 痴 [tc'] - 根据声调表，吴川话ts'对应广州话ts'
@@ -117,7 +118,8 @@
         rd            r     // 嗦 [1] - 声母表中为rd
 
 .group y
-        y             j     // 优 [i]
+        y (L03        j     // 优 [i] - 在韵母前作半元音
+        y             _^_EN // 其他情况按英文处理
 
 .group g
         gu            kw    // 姑 [kw]
@@ -132,7 +134,8 @@
         h             h     // 呵 [h]
 
 .group w
-        w             w     // 蛙 [w]
+        w (L03        w     // 蛙 [w] - 在韵母前作半元音
+        w             _^_EN // 其他情况按英文处理
 
 // 声调处理
 // 吴川话10个声调系统（根据声调表.txt）

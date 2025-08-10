@@ -8,52 +8,52 @@
 //  声调系统 (10个声调)
 //====================================================
 
-phoneme 1   //  阴平 55
+phoneme 1   //  阴平 55 (高平调)
   stress
   Tone(55, 55, envelope/p_level, NULL)
 endphoneme
 
-phoneme 2   //  阳平 44
+phoneme 2   //  阳平 44 (中平调)
   stress
   Tone(44, 44, envelope/p_level, NULL)
 endphoneme
 
-phoneme 3   //  阴上 24
+phoneme 3   //  阴上 24 (低升调)
   stress
-  Tone(24, 24, envelope/p_level, NULL)
+  Tone(24, 42, envelope/p_rise, NULL)
 endphoneme
 
-phoneme 4   //  阳上 33
+phoneme 4   //  阳上 33 (中平调)
   stress
   Tone(33, 33, envelope/p_level, NULL)
 endphoneme
 
-phoneme 5   //  阴去 11
+phoneme 5   //  阴去 11 (低平调)
   stress
   Tone(11, 11, envelope/p_level, NULL)
 endphoneme
 
-phoneme 6   //  阳去 22
+phoneme 6   //  阳去 22 (低平调)
   stress
   Tone(22, 22, envelope/p_level, NULL)
 endphoneme
 
-phoneme 7   //  上阴入 4
+phoneme 7   //  上阴入 4 (高短调)
   stress
   Tone(4, 4, envelope/p_level, NULL)
 endphoneme
 
-phoneme 8   //  下阴入 1
+phoneme 8   //  下阴入 1 (低短调)
   stress
   Tone(1, 1, envelope/p_level, NULL)
 endphoneme
 
-phoneme 9   //  上阳入 3
+phoneme 9   //  上阳入 3 (中短调)
   stress
   Tone(3, 3, envelope/p_level, NULL)
 endphoneme
 
-phoneme 10  //  下阳入 2
+phoneme 10  //  下阳入 2 (低短调)
   stress
   Tone(2, 2, envelope/p_level, NULL)
 endphoneme
@@ -212,7 +212,7 @@ phoneme kw   // gu [kw]
   WAV(ustop/k)
 endphoneme
 
-phoneme kwh  // ku [k'w]
+phoneme kwh  // ku [k’w]
   vls vel stp
   lengthmod 2
   Vowelin f1=0 f2=2300 200 300 f3=-200 80
@@ -260,4 +260,25 @@ phoneme ê    // ê元音
   vwl starttype #e endtype #e
   length 200
   FMT(vowel/ee_1)
+endphoneme
+
+//====================================================
+//  特殊辅音定义
+//====================================================
+
+phoneme dh   // 吴川话dh声母，等同于d
+  vcd alv stp
+  lengthmod 5
+  Vowelin f1=1  f2=1700 -300 300  f3=-100 80
+  Vowelout f1=2 f2=1700 -300 300  f3=-100 80 brk
+
+  IF PreVoicing THEN
+    FMT(d/xd)
+  ENDIF
+
+  IF nextPh(isPause2) THEN
+    FMT(d/d_)  addWav(x/d_)
+  ENDIF
+
+  FMT(d/d) addWav(x/d)
 endphoneme

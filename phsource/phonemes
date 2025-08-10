@@ -969,7 +969,6 @@ endphoneme
 
 phoneme d
   vcd alv stp
-  voicingswitch t
   lengthmod 5
   Vowelin f1=1  f2=1700 -300 300  f3=-100 80
   Vowelout f1=2 f2=1700 -300 300  f3=-100 80 brk
