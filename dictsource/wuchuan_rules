@@ -73,7 +73,7 @@
         b             b     // 波 [b]
 
 .group p
-        p             ph    // 坡 [p']
+        p             p    // 坡 [p']
 
 .group m
         m             m     // 摸 [m]
@@ -112,7 +112,7 @@
         q             tsh   // 痴 [tc'] - 根据声调表，吴川话ts'对应广州话ts'
 
 .group x
-        x             S     // 诗 [c]
+        x             x     // 诗 [c]
 
 .group r
         rd            r     // 嗦 [1] - 声母表中为rd
@@ -123,7 +123,7 @@
 
 .group g
         gu            kw    // 姑 [kw]
-        g             k     // 哥 [k]
+        g             g     // 哥 [k] - 注释掉，g在韵母后面只作后鼻音处理
 
 .group k
         ku            kwh   // 箍 [k'w]
@@ -170,5 +170,5 @@
 .group 9
         9        9    // 上阳入 13
 
-.group 0
-        0        10   // 下阳入 12
+.group 10
+        10        10   // 下阳入 12

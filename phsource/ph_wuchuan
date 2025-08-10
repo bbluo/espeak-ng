@@ -35,7 +35,7 @@ endphoneme
 
 phoneme 6   //  阳去 22 (低平调)
   stress
-  Tone(22, 22, envelope/p_level, NULL)
+  Tone(20, 20, envelope/p_level, NULL)
 endphoneme
 
 phoneme 7   //  上阴入 4 (高短调)
@@ -236,12 +236,30 @@ phoneme â    // â元音
   FMT(vowel/a)
 endphoneme
 
-phoneme y    // y辅音
-  vcd alv apr
-  lengthmod 6
-  Vowelin f1=0 f2=1700 -300 300 f3=-100 80
-  Vowelout f1=2 f2=1700 -300 250 f3=-100 80 rms=20
-  WAV(j/j_)
+phoneme y // **y**es
+  liquid pal starttype #i
+  lengthmod 7
+
+  IF nextPhW(isVowel) THEN
+    NextVowelStarts
+      VowelStart(j/j@)
+      VowelStart(j/ja)
+      VowelStart(j/je)
+      VowelStart(j/ji)
+      VowelStart(j/jo)
+      VowelStart(j/ju)
+    EndSwitch
+
+    VowelEnding(j/xj, -30)
+
+    IF prevPh(isPause) THEN
+      FMT(j/_j)
+    ENDIF
+  ELSE
+    // no vowel follows
+    Vowelout len=70
+    FMT(j/j_)
+  ENDIF
 endphoneme
 
 phoneme I    // 大写I双元音
@@ -281,4 +299,99 @@ phoneme dh   // 吴川话dh声母，等同于d
   ENDIF
 
   FMT(d/d) addWav(x/d)
+endphoneme
+
+//====================================================
+//  特殊d音素处理 - 前面有韵母时不发声
+//====================================================
+
+phoneme d
+  vcd alv stp
+  voicingswitch t
+  lengthmod 5
+  Vowelin f1=1  f2=1700 -300 300  f3=-100 80
+  Vowelout f1=2 f2=1700 -300 300  f3=-100 80 brk
+
+  // 检查前一个音素是否为韵母，如果是则静音处理
+  IF prevPh(isVowel) THEN
+    // 前面有韵母时不发声
+    length 0
+    // 使用静音处理
+  ELSE
+    // 正常的d音素发声
+    IF PreVoicing THEN
+      FMT(d/xd)
+    ENDIF
+
+    IF nextPh(isPause2) THEN
+      FMT(d/d_)  addWav(x/d_)
+    ENDIF
+
+    FMT(d/d) addWav(x/d)
+  ENDIF
+endphoneme
+
+//====================================================
+//  特殊g音素处理 - 前面有韵母时不发声
+//====================================================
+
+phoneme g
+  vcd vel stp
+  voicingswitch k
+  lengthmod 5
+  Vowelin f1=2  f2=2300 200 300  f3=-300 80
+  Vowelout f1=2  f2=2300 250 300  f3=-300 80 brk
+
+  // 检查前一个音素是否为韵母，如果是则静音处理
+  IF prevPh(isVowel) THEN
+    // 前面有韵母时不发声，作为后鼻音处理
+    length 0
+    // 使用静音处理
+  ELSE
+    // 正常的g音素发声
+    IF PreVoicing THEN
+      FMT(g/xg)
+    ENDIF
+
+    IF nextPh(isPause2) THEN
+      FMT(g/g_) addWav(x/g_)
+    ENDIF
+    FMT(g/g) addWav(x/g2, 150)
+  ENDIF
+endphoneme
+
+phoneme p
+  vls blb stp
+  lengthmod 2
+  Vowelin  f1=0  f2=1000 -50 -100  f3=-200 80 amp=11
+  Vowelout f1=0  f2=1000 -500 -350  f3=-300 80 rms=22
+
+  IF nextPh(isPause2) THEN
+    WAV(ustop/p_)
+  ELIF nextPh(r) THEN
+    WAV(ustop/pr, 70)
+  ELIF nextPh(R) OR nextPh(R2) THEN
+    WAV(ustop/pr)
+  ELIF nextPh(@-) THEN
+    WAV(ustop/p_unasp)
+  ELIF nextPh(l) THEN
+    WAV(ustop/pl)
+  ENDIF
+  WAV(ustop/p)
+endphoneme
+
+//====================================================
+//  x音素 - 与普通话处理一致
+//====================================================
+
+phoneme x
+  vls vel frc
+  lengthmod 3
+  Vowelin f1=0  f2=2300 200 400  f3=-100 80
+  Vowelout f1=0 f2=2300 300 400  f3=-100 80  rms=20
+
+  IF nextPh(isPause) THEN
+    WAV(ufric/x_, 60)
+  ENDIF
+  WAV(ufric/x_hr, 20)
 endphoneme
