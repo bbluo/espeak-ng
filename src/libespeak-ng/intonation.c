@@ -17,6 +17,9 @@
  * along with this program; if not, see: <http://www.gnu.org/licenses/>.
  */
 
+#include <string.h>
+#include "debug_log.h"
+
 #include "config.h"
 
 #include <stdint.h>
@@ -766,6 +769,9 @@ static int calc_pitches(SYLLABLE *syllable_tab, int control, int start, int end,
 
 static void CalcPitches_Tone(Translator *tr)
 {
+	DEBUG_LOG_INTONATION("开始声调音高计算: 语言=0x%x, 音素数量=%d", 
+		tr->translator_name, n_phoneme_list);
+	
 	PHONEME_LIST *p;
 	int ix;
 	int final_stressed = 0;
@@ -820,16 +826,19 @@ static void CalcPitches_Tone(Translator *tr)
 		if (p->synthflags & SFLAG_SYLLABLE) {
 			tone_ph = p->tone_ph;
 			tph = phoneme_tab[tone_ph];
+			DEBUG_LOG_INTONATION("处理音节 %d: 声调音素=0x%x, 重音级别=%d", ix, tone_ph, p->stresslevel);
 			
 			/* Hakka
 			ref.:https://en.wikipedia.org/wiki/Sixian_dialect#Tone_sandhi */
 			if (tr->translator_name == L3('h','a','k')){
+				DEBUG_LOG_INTONATION("客家话声调变调处理: 前音素=0x%x, 当前音素=0x%x", prev_tph->mnemonic, tph->mnemonic);
 				if (prev_tph->mnemonic == 0x31){ // [previous one is 1st tone]
 				  // [this one is 1st, 4th, or 6th tone]
 				  if (tph->mnemonic == 0x31 || tph->mnemonic == 0x34 ||
 					  tph->mnemonic == 0x36){
 					/* trigger the tone sandhi of the prev. syllable
 					   from 1st tone ->2nd tone */
+					DEBUG_LOG_INTONATION("客家话变调: 第一声变第二声");
 					prev_p->tone_ph = PhonemeCode('2'); 
 				  }
 				}
@@ -837,12 +846,16 @@ static void CalcPitches_Tone(Translator *tr)
 
 			// Mandarin
 			if (tr->translator_name == L('z', 'h')) {
+				DEBUG_LOG_INTONATION("普通话声调处理: 原声调=0x%x, 暂停=%d, 声调提升=%d", tone_ph, pause, tone_promoted);
 				if (tone_ph == 0) {
 					if (pause || tone_promoted) {
 						tone_ph = PhonemeCode2('5', '5'); // no previous vowel, use tone 1
 						tone_promoted = true;
-					} else
+						DEBUG_LOG_INTONATION("普通话: 设置默认第一声 (55)");
+					} else {
 						tone_ph = PhonemeCode2('1', '1'); // default tone 5
+						DEBUG_LOG_INTONATION("普通话: 设置默认轻声 (11)");
+					}
 
 					p->tone_ph = tone_ph;
 					tph = phoneme_tab[tone_ph];
@@ -857,25 +870,39 @@ static void CalcPitches_Tone(Translator *tr)
 				}
 
 				if (prevw_tph->mnemonic == 0x343132) { // [214]
-					if (tph->mnemonic == 0x343132) // [214]
+					DEBUG_LOG_INTONATION("普通话三声变调: 前字三声 [214]");
+					if (tph->mnemonic == 0x343132) { // [214]
+						DEBUG_LOG_INTONATION("普通话变调: 三声+三声 -> 二声+三声");
 						prev_p->tone_ph = PhonemeCode2('3', '5');
-					else
+					} else {
+						DEBUG_LOG_INTONATION("普通话变调: 三声+其他 -> 半三声+其他");
 						prev_p->tone_ph = PhonemeCode2('2', '1');
+					}
 				}
-				if ((prev_tph->mnemonic == 0x3135)  && (tph->mnemonic == 0x3135)) // [51] + [51]
+				if ((prev_tph->mnemonic == 0x3135)  && (tph->mnemonic == 0x3135)) { // [51] + [51]
+					DEBUG_LOG_INTONATION("普通话变调: 四声+四声 -> 二声+四声");
 					prev_p->tone_ph = PhonemeCode2('5', '3');
+				}
 
 				if (tph->mnemonic == 0x3131) { // [11] Tone 5
+					DEBUG_LOG_INTONATION("普通话轻声处理: 前字声调=0x%x", prevw_tph->mnemonic);
 					// tone 5, change its level depending on the previous tone (across word boundaries)
-					if (prevw_tph->mnemonic == 0x3535)
+					if (prevw_tph->mnemonic == 0x3535) {
+						DEBUG_LOG_INTONATION("轻声跟一声: 调值22");
 						p->tone_ph = PhonemeCode2('2', '2');
-					if (prevw_tph->mnemonic == 0x3533)
+					}
+					if (prevw_tph->mnemonic == 0x3533) {
+						DEBUG_LOG_INTONATION("轻声跟二声: 调值33");
 						p->tone_ph = PhonemeCode2('3', '3');
-					if (prevw_tph->mnemonic == 0x343132)
+					}
+					if (prevw_tph->mnemonic == 0x343132) {
+						DEBUG_LOG_INTONATION("轻声跟三声: 调值44");
 						p->tone_ph = PhonemeCode2('4', '4');
+					}
 
 					// tone 5 is unstressed (shorter)
 					p->stresslevel = 0; // diminished stress
+					DEBUG_LOG_INTONATION("轻声重音级别设为0");
 				}
 			}
 
@@ -886,6 +913,7 @@ static void CalcPitches_Tone(Translator *tr)
 	}
 
 	// convert tone numbers to pitch
+	DEBUG_LOG_INTONATION("开始声调转音高: 音高调整=%d, 音高递减=%d", pitch_adjust, pitch_decrement);
 	p = &phoneme_list[0];
 	for (ix = 0; ix < n_phoneme_list; ix++, p++) {
 		if (p->synthflags & SFLAG_SYLLABLE) {
@@ -895,19 +923,24 @@ static void CalcPitches_Tone(Translator *tr)
 				if (ix == final_stressed) {
 					// the last stressed syllable
 					pitch_adjust = pitch_low;
+					DEBUG_LOG_INTONATION("最后重音音节 %d: 音高调整=%d", ix, pitch_adjust);
 				} else {
 					pitch_adjust -= pitch_decrement;
 					if (pitch_adjust <= pitch_low)
 						pitch_adjust = pitch_high;
+					DEBUG_LOG_INTONATION("音节 %d: 音高调整=%d", ix, pitch_adjust);
 				}
 			}
 
 			if (tone_ph == 0) {
 				tone_ph = phonDEFAULTTONE; // no tone specified, use default tone 1
 				p->tone_ph = tone_ph;
+				DEBUG_LOG_INTONATION("音节 %d: 使用默认声调 0x%x", ix, tone_ph);
 			}
 			p->pitch1 = pitch_adjust + phoneme_tab[tone_ph]->start_type;
 			p->pitch2 = pitch_adjust + phoneme_tab[tone_ph]->end_type;
+			DEBUG_LOG_INTONATION("音节 %d: 声调=0x%x, 起始音高=%d, 结束音高=%d", 
+				ix, tone_ph, p->pitch1, p->pitch2);
 		}
 	}
 }

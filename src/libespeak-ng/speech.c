@@ -48,6 +48,9 @@
 #include <espeak-ng/speak_lib.h>
 #include <espeak-ng/encoding.h>
 
+// 调试日志宏定义
+#include "debug_log.h"
+
 #include "speech.h"
 #include "common.h"               // for GetFileLength
 #include "dictionary.h"           // for GetTranslatedPhonemeString, strncpy0
@@ -425,16 +428,22 @@ ESPEAK_NG_API int espeak_ng_GetSampleRate(void)
 
 static espeak_ng_STATUS Synthesize(unsigned int unique_identifier, const void *text, int flags)
 {
+	DEBUG_LOG_SPEECH("进入Synthesize函数 - unique_id: %u, flags: %d", unique_identifier, flags);
+	
 	// Fill the buffer with output sound
 	int length;
 	int finished = 0;
 
-	if ((outbuf == NULL) || (event_list == NULL))
+	if ((outbuf == NULL) || (event_list == NULL)) {
+		DEBUG_LOG_SPEECH("错误: 输出缓冲区或事件列表未初始化");
 		return ENS_NOT_INITIALIZED;
+	}
 
 	option_ssml = flags & espeakSSML;
 	option_phoneme_input = flags & espeakPHONEMES;
 	option_endpause = flags & espeakENDPAUSE;
+	
+	DEBUG_LOG_SPEECH("选项设置 - SSML: %d, 音素输入: %d, 结束暂停: %d", option_ssml, option_phoneme_input, option_endpause);
 
 	count_samples = 0;
 
@@ -543,6 +552,14 @@ espeak_ng_STATUS sync_espeak_Synth(unsigned int unique_identifier, const void *t
                                    unsigned int position, espeak_POSITION_TYPE position_type,
                                    unsigned int end_position, unsigned int flags, void *user_data)
 {
+	DEBUG_LOG_SPEECH("开始语音合成 - unique_id: %u, position: %u, position_type: %d, end_position: %u, flags: %u", 
+	          unique_identifier, position, position_type, end_position, flags);
+	
+	if (text) {
+		size_t text_len = strlen((const char*)text);
+		DEBUG_LOG_SPEECH("输入文本长度: %zu, 内容: %.100s%s", text_len, (const char*)text, text_len > 100 ? "..." : "");
+	}
+	
 	InitText(flags);
 	my_unique_identifier = unique_identifier;
 	my_user_data = user_data;

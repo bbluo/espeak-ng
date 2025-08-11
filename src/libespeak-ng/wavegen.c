@@ -48,6 +48,9 @@
 #include "sintab.h"
 #include "speech.h"
 
+// 调试日志宏定义
+#include "debug_log.h"
+
 static void SetSynth(int length, int modn, frame_t *fr1, frame_t *fr2, voice_t *v);
 
 static voice_t *wvoice = NULL;
@@ -1264,6 +1267,8 @@ static int WavegenFill2(void)
 	int marker_type;
 	static bool resume = false;
 	static int echo_complete = 0;
+	
+	DEBUG_LOG_WAVEGEN("WavegenFill2开始 - 队列使用量: %d, 输出缓冲区剩余: %ld", WcmdqUsed(), out_end - out_ptr);
 
 	if (wdata.pitch < 102400)
 		wdata.pitch = 102400; // min pitch, 25 Hz  (25 << 12)
@@ -1282,10 +1287,13 @@ static int WavegenFill2(void)
 		result = 0;
 		q = wcmdq[wcmdq_head];
 		length = q[1];
+		
+		DEBUG_LOG_WAVEGEN("处理音频命令 - 类型: %ld, 长度: %d", q[0] & 0xff, length);
 
 		switch (q[0] & 0xff)
 		{
 		case WCMD_PITCH:
+			DEBUG_LOG_WAVEGEN("设置音调 - 长度: %d, 起始音调: %ld, 结束音调: %ld", length, q[3] >> 16, q[3] & 0xffff);
 			SetPitch(length, (unsigned char *)q[2], q[3] >> 16, q[3] & 0xffff);
 			break;
 		case WCMD_PHONEME_ALIGNMENT:
@@ -1328,10 +1336,13 @@ static int WavegenFill2(void)
 			wdata.mix_wavefile = (unsigned char *)q[2];
 			break;
 		case WCMD_SPECT2: // as WCMD_SPECT but stop any concurrent wave file
+			DEBUG_LOG_WAVEGEN("音素频谱处理2 - 停止并发音频文件");
 			wdata.n_mix_wavefile = 0; // ... and drop through to WCMD_SPECT case
 		case WCMD_SPECT:
+			DEBUG_LOG_WAVEGEN("音素频谱处理 - 长度: %d, 调制: %ld, frame1: %p, frame2: %p", length & 0xffff, q[1] >> 16, (void*)q[2], (void*)q[3]);
 			echo_complete = echo_length;
 			result = Wavegen(length & 0xffff, q[1] >> 16, resume, (frame_t *)q[2], (frame_t *)q[3], wvoice);
+			DEBUG_LOG_WAVEGEN("音素频谱处理完成 - 结果: %d", result);
 			break;
 #if USE_KLATT
 		case WCMD_KLATT2: // as WCMD_SPECT but stop any concurrent wave file

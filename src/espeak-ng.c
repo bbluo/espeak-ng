@@ -34,6 +34,9 @@
 #include <espeak-ng/espeak_ng.h>
 #include <espeak-ng/speak_lib.h>
 
+// 调试日志宏定义
+#include "libespeak-ng/debug_log.h"
+
 #ifndef PROGRAM_NAME
 #define PROGRAM_NAME "espeak-ng"
 #endif
@@ -598,14 +601,17 @@ int main(int argc, char **argv)
 		}
 	}
 
+	DEBUG_LOG_ESPEAK("初始化espeak-ng，数据路径: %s", data_path ? data_path : "默认路径");
 	espeak_ng_InitializePath(data_path);
 	espeak_ng_ERROR_CONTEXT context = NULL;
 	espeak_ng_STATUS result = espeak_ng_Initialize(&context);
 	if (result != ENS_OK) {
+		DEBUG_LOG_ESPEAK("espeak-ng初始化失败，错误代码: %d", result);
 		espeak_ng_PrintStatusCodeMessage(result, stderr, context);
 		espeak_ng_ClearErrorContext(&context);
 		exit(1);
 	}
+	DEBUG_LOG_ESPEAK("espeak-ng初始化成功");
 
 	if (deterministic) {
 		// Set random generator state to well-known
@@ -641,19 +647,23 @@ int main(int argc, char **argv)
 	if (voicename[0] == 0)
 		strcpy(voicename, ESPEAKNG_DEFAULT_VOICE);
 
+	DEBUG_LOG_ESPEAK("设置语音: %s (加载方式: %s)", voicename, flag_load ? "文件" : "名称");
 	if(flag_load)
 		result = espeak_ng_SetVoiceByFile(voicename);
 	else
 		result = espeak_ng_SetVoiceByName(voicename);
 	if (result != ENS_OK) {
+		DEBUG_LOG_ESPEAK("按名称设置语音失败，尝试按属性设置");
 		memset(&voice_select, 0, sizeof(voice_select));
 		voice_select.languages = voicename;
 		result = espeak_ng_SetVoiceByProperties(&voice_select);
 		if (result != ENS_OK) {
+			DEBUG_LOG_ESPEAK("设置语音失败，错误代码: %d", result);
 			espeak_ng_PrintStatusCodeMessage(result, stderr, NULL);
 			exit(EXIT_FAILURE);
 		}
 	}
+	DEBUG_LOG_ESPEAK("语音设置成功: %s", voicename);
 
 	if (flag_compile) {
 		// This must be done after the voice is set
@@ -721,7 +731,9 @@ int main(int argc, char **argv)
 	if (p_text != NULL) {
 		int size;
 		size = strlen(p_text);
+		DEBUG_LOG_ESPEAK("开始合成文本 (命令行参数): 长度=%d, 内容='%s'", size, p_text);
 		espeak_Synth(p_text, size+1, 0, POS_CHARACTER, 0, synth_flags, NULL, NULL);
+		DEBUG_LOG_ESPEAK("文本合成完成");
 	} else if (flag_stdin) {
 		size_t max = 1000;
 		if ((p_text = (char *)malloc(max)) == NULL) {
@@ -733,6 +745,7 @@ int main(int argc, char **argv)
 			// line by line input on stdin or from FIFO
 			while (fgets(p_text, max, f_text) != NULL) {
 				p_text[max-1] = 0;
+				DEBUG_LOG_ESPEAK("合成文本行: '%s'", p_text);
 				espeak_Synth(p_text, max, 0, POS_CHARACTER, 0, synth_flags, NULL, NULL);
 				// Allow subprocesses to use the audio data through pipes.
 				fflush(stdout);
@@ -763,6 +776,7 @@ int main(int argc, char **argv)
 			}
 			if (ix > 0) {
 				p_text[ix] = 0;
+				DEBUG_LOG_ESPEAK("合成批量输入文本: 长度=%d, 内容='%s'", ix, p_text);
 				espeak_Synth(p_text, ix, 0, POS_CHARACTER, 0, synth_flags, NULL, NULL);
 			}
 		}
@@ -776,6 +790,7 @@ int main(int argc, char **argv)
 
 		fread(p_text, 1, filesize, f_text);
 		p_text[filesize] = 0;
+		DEBUG_LOG_ESPEAK("合成文件内容: 文件大小=%d, 内容='%s'", filesize, p_text);
 		espeak_Synth(p_text, filesize+1, 0, POS_CHARACTER, 0, synth_flags, NULL, NULL);
 		fclose(f_text);
 

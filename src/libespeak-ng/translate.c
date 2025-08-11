@@ -32,6 +32,9 @@
 #include <espeak-ng/speak_lib.h>
 #include <espeak-ng/encoding.h>
 
+// 调试日志宏定义
+#include "debug_log.h"
+
 #include "translate.h"
 #include "common.h"
 #include "dictionary.h"           // for TranslateRules, LookupDictList, Cha...
@@ -301,6 +304,8 @@ int SetTranslator3(const char *new_language)
 
 static int TranslateWord2(Translator *tr, char *word, WORD_TAB *wtab, int pre_pause)
 {
+	DEBUG_LOG_TRANSLATE("开始翻译单词: '%s', 长度: %d, 标志: 0x%x", word, wtab->length, wtab->flags);
+	
 	int flags = 0;
 	int stress;
 	int next_stress;
@@ -402,9 +407,11 @@ static int TranslateWord2(Translator *tr, char *word, WORD_TAB *wtab, int pre_pa
 
 		word_replaced[2] = 0;
 		flags = TranslateWord(translator, word, wtab, &word_replaced[2]);
+		DEBUG_LOG_TRANSLATE("单词翻译结果: flags=0x%x, 音素字符串长度: %d", flags, (int)strlen(word_phonemes));
 
 		if (flags & FLAG_SPELLWORD) {
 			// re-translate the word as individual letters, separated by spaces
+			DEBUG_LOG_TRANSLATE("需要拼写单词: '%s'", word);
 			memcpy(word, word_copy, word_copy_len);
 			return flags;
 		}
@@ -550,16 +557,25 @@ static int TranslateWord2(Translator *tr, char *word, WORD_TAB *wtab, int pre_pa
 	// Each iteration may require up to 1 phoneme
 	// and after this loop we may require up to 3 phonemes
 	// and our caller requires 2 phonemes
+	DEBUG_LOG_TRANSLATE("开始处理音素序列，当前音素列表长度: %d", n_ph_list2);
 	while (((ph_code = *p++) != 0) && (n_ph_list2 < N_PHONEME_LIST-3-2)) {
-		if (ph_code == 255)
+		if (ph_code == 255) {
+			DEBUG_LOG_TRANSLATE("跳过未知音素代码: 255");
 			continue; // unknown phoneme
+		}
 
 		// Add the phonemes to the first stage phoneme list (ph_list2)
+		if (ph_code >= n_phoneme_tab) {
+			DEBUG_LOG_TRANSLATE("音素代码超出范围: %d (最大: %d)", ph_code, n_phoneme_tab-1);
+			continue;
+		}
 		ph = phoneme_tab[ph_code];
 		if (ph == NULL) {
+			DEBUG_LOG_TRANSLATE("无效音素代码: %d", ph_code);
 			printf("Invalid phoneme code %d\n", ph_code);
 			continue;
 		}
+		DEBUG_LOG_TRANSLATE("处理音素: 代码=%d, 类型=%d", ph_code, ph->type);
 
 		if (ph_code == phonSWITCH) {
 			ph_list2[n_ph_list2].phcode = ph_code;
@@ -573,14 +589,18 @@ static int TranslateWord2(Translator *tr, char *word, WORD_TAB *wtab, int pre_pa
 			// don't add stress phonemes codes to the list, but give their stress
 			// value to the next vowel phoneme
 			// std_length is used to hold stress number or (if >10) a tone number for a tone language
-			if (ph->program == 0)
+			if (ph->program == 0) {
 				next_stress = ph->std_length;
-			else {
+				DEBUG_LOG_TRANSLATE("设置重音级别: %d (音素代码: %d)", next_stress, ph_code);
+			} else {
 				// for tone languages, the tone number for a syllable follows the vowel
-				if (prev_vowel >= 0)
+				if (prev_vowel >= 0) {
 					ph_list2[prev_vowel].tone_ph = ph_code;
-				else
+					DEBUG_LOG_TRANSLATE("为前一个元音设置声调: 元音位置=%d, 声调代码=%d", prev_vowel, ph_code);
+				} else {
 					next_tone = ph_code; // no previous vowel, apply to the next vowel
+					DEBUG_LOG_TRANSLATE("设置下一个元音的声调: 声调代码=%d", ph_code);
+				}
 			}
 		} else if (ph_code == phonSYLLABIC) {
 			// mark the previous phoneme as a syllabic consonant
@@ -604,13 +624,32 @@ static int TranslateWord2(Translator *tr, char *word, WORD_TAB *wtab, int pre_pa
 			embedded_flag = 0;
 			ph_list2[n_ph_list2].sourceix = srcix;
 			srcix = 0;
+			
+			// 添加详细的音素调试信息
+			const char* ph_type_name = "未知";
+			switch(ph->type) {
+				case phVOWEL: ph_type_name = "元音"; break;
+				case phSTOP: ph_type_name = "塞音"; break;
+				case phFRICATIVE: ph_type_name = "擦音"; break;
+				case phNASAL: ph_type_name = "鼻音"; break;
+				case phLIQUID: ph_type_name = "流音"; break;
+				case phVSTOP: ph_type_name = "浊塞音"; break;
+				case phVFRICATIVE: ph_type_name = "浊擦音"; break;
+				case phPAUSE: ph_type_name = "停顿"; break;
+				default: ph_type_name = "其他"; break;
+			}
+			DEBUG_LOG_TRANSLATE("添加音素: 代码=%d, 类型=%s, 标志=0x%x", 
+				ph_code, ph_type_name, ph->phflags);
 
 			if (ph->type == phVOWEL) {
 				stress = next_stress;
 				next_stress = 1; // default is 'unstressed'
+				DEBUG_LOG_TRANSLATE("处理元音: 代码=%d, 重音级别=%d", ph_code, stress);
 
-				if (stress >= 4)
+				if (stress >= 4) {
 					any_stressed_words = true;
+					DEBUG_LOG_TRANSLATE("检测到重音单词，重音级别: %d", stress);
+				}
 
 				if ((prev_vowel >= 0) && (n_ph_list2-1) != prev_vowel)
 					ph_list2[n_ph_list2-1].stresslevel = stress; // set stress for previous consonant
@@ -621,9 +660,11 @@ static int TranslateWord2(Translator *tr, char *word, WORD_TAB *wtab, int pre_pa
 				if (stress > max_stress) {
 					max_stress = stress;
 					max_stress_ix = n_ph_list2;
+					DEBUG_LOG_TRANSLATE("更新最大重音: 级别=%d, 位置=%d", max_stress, max_stress_ix);
 				}
 				if (next_tone != 0) {
 					ph_list2[n_ph_list2].tone_ph = next_tone;
+					DEBUG_LOG_TRANSLATE("为元音设置声调: 元音=%s, 声调代码=%d", (ph && ph->mnemonic) ? ph->mnemonic : "无名称", next_tone);
 					next_tone = 0;
 				}
 			} else {
@@ -923,6 +964,8 @@ static int UpperCaseInWord(Translator *tr, char *word, int c)
 // Used by espeak_TextToPhonemesWithTerminator.
 void TranslateClauseWithTerminator(Translator *tr, int *tone_out, char **voice_change, int *terminator_out)
 {
+	DEBUG_LOG_TRANSLATE("开始翻译子句 - translator: %p", tr);
+	
 	int ix;
 	int c;
 	int cc = 0;
@@ -966,8 +1009,14 @@ void TranslateClauseWithTerminator(Translator *tr, int *tone_out, char **voice_c
 	int terminator;
 	int tone;
 
-	if (tr == NULL)
+	if (tr == NULL) {
+		DEBUG_LOG_TRANSLATE("错误: translator为NULL");
 		return;
+	}
+	
+	if (tr->translator_name) {
+		DEBUG_LOG_TRANSLATE("使用翻译器: %d (0x%x)", tr->translator_name, tr->translator_name);
+	}
 
 	MAKE_MEM_UNDEFINED(&voice_change_name, sizeof(voice_change_name));
 
@@ -1376,6 +1425,7 @@ void TranslateClauseWithTerminator(Translator *tr, int *tone_out, char **voice_c
 				c = ' '; // various characters to treat as space
 			else if (iswdigit(c)) {
 				if (tr->langopts.tone_numbers && IsAlpha(prev_out) && !IsDigit(next_in)) {
+					DEBUG_LOG_TRANSLATE("检测到声调数字: 字符='%c', 前一个字符='%c', 下一个字符='%c'", c, prev_out, next_in);
 				} else if ((prev_out != ' ') && !iswdigit(prev_out)) {
 					if ((prev_out != tr->langopts.decimal_sep) || ((decimal_sep_count == true) && (tr->langopts.decimal_sep == ','))) {
 						c = ' ';

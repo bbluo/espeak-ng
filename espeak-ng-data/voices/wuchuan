@@ -1,0 +1,22 @@
+name wuchuan
+language wuchuan
+phonemes wuchuan
+dictionary wuchuan
+
+// 吴川方言语音配置
+// 基于吴川话拼音方案和声调表
+
+// 声调设置（根据声调表.txt中的10个声调）
+// 阴平55、阴上24、阴去11、上阴入4、下阴入1
+// 阳平44、阳上33、阳去22、上阳入3、下阳入2
+
+pitch 50 120
+voicing 100
+echo 40 30
+flutter 5
+roughness 2
+formant 100 100 100
+
+// 语速和音高设置
+speed 175
+volume 100

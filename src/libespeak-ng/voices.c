@@ -18,6 +18,9 @@
  * along with this program; if not, see: <http://www.gnu.org/licenses/>.
  */
 
+// Debug logging macros
+#include "debug_log.h"
+
 #include "config.h"
 
 #include <ctype.h>
@@ -1014,6 +1017,7 @@ static int SetVoiceScores(espeak_VOICE *voice_select, espeak_VOICE **voices, int
 
 espeak_VOICE *SelectVoiceByName(espeak_VOICE **voices, const char *name2)
 {
+	DEBUG_LOG_VOICES("SelectVoiceByName: searching for voice name='%s'", name2 ? name2 : "(null)");
 	int ix;
 	int match_fname = -1;
 	int match_fname2 = -1;
@@ -1024,9 +1028,11 @@ espeak_VOICE *SelectVoiceByName(espeak_VOICE **voices, const char *name2)
 	char name[40];
 
 	if (voices == NULL) {
+		DEBUG_LOG_VOICES("SelectVoiceByName: voices list is NULL, creating voices list");
 		if (n_voices_list == 0)
 			espeak_ListVoices(NULL); // create the voices list
 		voices = voices_list;
+		DEBUG_LOG_VOICES("SelectVoiceByName: voices list created with %d voices", n_voices_list);
 	}
 
 	strncpy0(name, name2, sizeof(name));
@@ -1034,28 +1040,37 @@ espeak_VOICE *SelectVoiceByName(espeak_VOICE **voices, const char *name2)
 	sprintf(last_part, "%c%s", PATHSEP, name);
 	last_part_len = strlen(last_part);
 
+	DEBUG_LOG_VOICES("SelectVoiceByName: searching through voices for name='%s'", name);
 	for (ix = 0; voices[ix] != NULL; ix++) {
 		if (strcasecmp(name, voices[ix]->name) == 0) {
+			DEBUG_LOG_VOICES("SelectVoiceByName: found exact name match at index %d: '%s'", ix, voices[ix]->name);
 			match_name = ix; // found matching voice name
 			break;
 		} else {
 			id = voices[ix]->identifier;
-			if (strcasecmp(name, id) == 0)
+			if (strcasecmp(name, id) == 0) {
+				DEBUG_LOG_VOICES("SelectVoiceByName: found identifier match at index %d: '%s'", ix, id);
 				match_fname = ix; // matching identifier, use this if no matching name
-			else if (strcasecmp(last_part, &id[strlen(id)-last_part_len]) == 0)
+			} else if (strcasecmp(last_part, &id[strlen(id)-last_part_len]) == 0) {
+				DEBUG_LOG_VOICES("SelectVoiceByName: found partial identifier match at index %d: '%s'", ix, id);
 				match_fname2 = ix;
+			}
 		}
 	}
 
 	if (match_name < 0) {
+		DEBUG_LOG_VOICES("SelectVoiceByName: no exact name match, trying identifier matches");
 		match_name = match_fname; // no matching name, try matching filename
 		if (match_name < 0)
 			match_name = match_fname2; // try matching just the last part of the filename
 	}
 
-	if (match_name < 0)
+	if (match_name < 0) {
+		DEBUG_LOG_VOICES("SelectVoiceByName: no voice found for name='%s'", name);
 		return NULL;
+	}
 
+	DEBUG_LOG_VOICES("SelectVoiceByName: selected voice at index %d: name='%s', identifier='%s'", match_name, voices[match_name]->name, voices[match_name]->identifier);
 	return voices[match_name];
 }
 

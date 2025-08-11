@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2005 to 2014 by Jonathan Duddington
+ * Copyright (C) 2005 to 2015 by Jonathan Duddington
  * email: jonsd@users.sourceforge.net
- * Copyright (C) 2013-2017 Reece H. Dunn
+ * Copyright (C) 2015-2017 Reece H. Dunn
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see: <http://www.gnu.org/licenses/>.
  */
+
+// Debug logging macros
+#include "debug_log.h"
 
 #include "config.h"
 
@@ -2087,6 +2090,8 @@ int TranslateRules(Translator *tr, char *p_start, char *phonemes, int ph_size, c
 	/* Translate a word bounded by space characters
 	   Append the result to 'phonemes' and any standard prefix/suffix in 'end_phonemes' */
 
+	DEBUG_LOG_DICTIONARY("开始字典规则翻译: 输入='%s', 单词标志=0x%x", p_start, word_flags);
+	
 	unsigned char c, c2;
 	unsigned int c12;
 	int wc = 0;
@@ -2144,11 +2149,21 @@ int TranslateRules(Translator *tr, char *p_start, char *phonemes, int ph_size, c
 
 	while (((c = *p) != ' ') && (c != 0)) {
 		int wc_bytes = utf8_in(&wc, p);
-		if (IsAlpha(wc))
+		DEBUG_LOG_DICTIONARY("处理字符: 0x%x (%c), UTF-8字节数: %d", wc, (wc >= 32 && wc < 127) ? wc : '?', wc_bytes);
+		
+		// 检测中文字符范围 (CJK统一汉字)
+		if (wc >= 0x4E00 && wc <= 0x9FFF) {
+			DEBUG_LOG_DICTIONARY("检测到中文字符: 0x%x, UTF-8字节: %d", wc, wc_bytes);
+		}
+		
+		if (IsAlpha(wc)) {
 			any_alpha++;
+			DEBUG_LOG_DICTIONARY("检测到字母字符，字母计数: %d", any_alpha);
+		}
 
 		int n = tr->groups2_count[c];
 		if (IsDigit(wc) && ((tr->langopts.tone_numbers == 0) || !any_alpha)) {
+			DEBUG_LOG_DICTIONARY("处理数字字符: %c", wc);
 			// lookup the number in *_list not *_rules
 			char string[8];
 			char buf[40];
@@ -2724,6 +2739,7 @@ static const char *LookupDict2(Translator *tr, const char *word, const char *wor
  */
 int LookupDictList(Translator *tr, char **wordptr, char *ph_out, unsigned int *flags, int end_flags, WORD_TAB *wtab)
 {
+	DEBUG_LOG_DICTIONARY("LookupDictList: wordptr='%s', end_flags=%d, translator=%p", wordptr && *wordptr ? *wordptr : "(null)", end_flags, (void*)tr);
 	int length;
 	const char *found;
 	const char *word1;
@@ -2738,6 +2754,7 @@ int LookupDictList(Translator *tr, char **wordptr, char *ph_out, unsigned int *f
 
 	length = 0;
 	word2 = word1 = *wordptr;
+	DEBUG_LOG_DICTIONARY("LookupDictList: word1='%s', word2='%s'", word1 ? word1 : "(null)", word2 ? word2 : "(null)");
 
 	while ((word2[nbytes = utf8_nbytes(word2)] == ' ') && (word2[nbytes+1] == '.')) {
 		// look for an abbreviation of the form a.b.c
@@ -2861,6 +2878,7 @@ extern char word_phonemes[N_WORD_PHONEMES]; // a word translated into phoneme co
 int Lookup(Translator *tr, const char *word, char *ph_out)
 {
 	// Look up in *_list, returns dictionary flags[0] and phonemes
+	DEBUG_LOG_DICTIONARY("Lookup: word='%s', translator=%p", word ? word : "(null)", (void*)tr);
 
 	int flags0;
 	unsigned int flags[2];
@@ -2868,10 +2886,13 @@ int Lookup(Translator *tr, const char *word, char *ph_out)
 
 	flags[0] = 0;
 	flags[1] = FLAG_LOOKUP_SYMBOL;
+	DEBUG_LOG_DICTIONARY("Lookup: calling LookupDictList with flags[0]=%u, flags[1]=%u", flags[0], flags[1]);
 	if ((flags0 = LookupDictList(tr, &word1, ph_out, flags, FLAG_ALLOW_TEXTMODE, NULL)) != 0)
 		flags0 = flags[0];
 
+	DEBUG_LOG_DICTIONARY("Lookup: LookupDictList returned flags0=%d, flags[0]=%u, flags[1]=%u", flags0, flags[0], flags[1]);
 	if (flags[0] & FLAG_TEXTMODE) {
+		DEBUG_LOG_DICTIONARY("Lookup: processing TEXTMODE for word1='%s'", word1 ? word1 : "(null)");
 		int say_as = option_sayas;
 		option_sayas = 0; // don't speak replacement word as letter names
 		// NOTE: TranslateRoman checks text[-2] and IsLetterGroup looks
@@ -2883,10 +2904,13 @@ int Lookup(Translator *tr, const char *word, char *ph_out)
 		text[1] = ' ';
 		text[2] = ' ';
 		strncpy0(text+3, word1, sizeof(text)-3);
+		DEBUG_LOG_DICTIONARY("Lookup: calling TranslateWord with text='%s'", text+3);
 		flags0 = TranslateWord(tr, text+3, NULL, NULL);
 		strcpy(ph_out, word_phonemes);
+		DEBUG_LOG_DICTIONARY("Lookup: TEXTMODE result flags0=%d, ph_out='%s'", flags0, ph_out ? ph_out : "(null)");
 		option_sayas = say_as;
 	}
+	DEBUG_LOG_DICTIONARY("Lookup: returning flags0=%d, ph_out='%s'", flags0, ph_out ? ph_out : "(null)");
 	return flags0;
 }
 
