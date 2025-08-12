@@ -137,7 +137,7 @@ static void LogPhonemeData(const char* stage, PHONEME_LIST *plist, PHONEME_DATA 
 			break;
 	}
 	
-	// DEBUG_LOG_SYNTHESIZE("%s: [%s] %s - 时长:%dms", stage, mnemonic_str, type_name, plist->length > 0 ? plist->length : ph->std_length * 2);
+	DEBUG_LOG_SYNTHESIZE("%s: [%s] %s - 时长:%dms", stage, mnemonic_str, type_name, plist->length > 0 ? plist->length : ph->std_length * 2);
 }
 
 void SynthesizeInit(void)
@@ -1266,7 +1266,7 @@ int Generate(PHONEME_LIST *phoneme_list, int *n_ph, bool resume)
 		case phPAUSE: type_desc = "停顿"; break;
 	}
 	
-	// DEBUG_LOG_SYNTHESIZE("处理音素 [%d]: [%s] (%s) - 重音级别:%d, 时长:%dms", ix, mnemonic_str, type_desc, p->stresslevel, p->length);
+	DEBUG_LOG_SYNTHESIZE("处理音素 [%d]: [%s] (%s) - 重音级别:%d, 时长:%dms", ix, mnemonic_str, type_desc, p->stresslevel, p->length);
 
 		if(output_hooks && output_hooks->outputPhoSymbol)
 		{
@@ -1354,7 +1354,7 @@ int Generate(PHONEME_LIST *phoneme_list, int *n_ph, bool resume)
 			if (ph->phflags & phPREVOICE) {
 				// a period of voicing before the release
 			memset(&fmtp, 0, sizeof(fmtp));
-			// DEBUG_LOG_SYNTHESIZE("塞音预发声: 代码=%d", p->ph->code);
+			DEBUG_LOG_SYNTHESIZE("塞音预发声: 代码=%d", p->ph->code);
 			InterpretPhoneme(NULL, 0x01, p, phoneme_list, &phdata, &worddata);
 			LogPhonemeData("塞音预发声", p, &phdata);
 			fmtp.fmt_addr = phdata.sound_addr[pd_FMT];
@@ -1368,15 +1368,15 @@ int Generate(PHONEME_LIST *phoneme_list, int *n_ph, bool resume)
 				DoSpect2(ph, 0, &fmtp, p, 0);
 			}
 
-			// DEBUG_LOG_SYNTHESIZE("塞音爆破释放: 代码=%d", p->ph->code);
+			DEBUG_LOG_SYNTHESIZE("塞音爆破释放: 代码=%d", p->ph->code);
 			InterpretPhoneme(NULL, 0, p, phoneme_list, &phdata, &worddata);
 			LogPhonemeData("塞音释放", p, &phdata);
 			phdata.pd_control |= pd_DONTLENGTHEN;
 			DoSample3(&phdata, 0, 0);
-			// DEBUG_LOG_SYNTHESIZE("塞音声母处理完成");
+			DEBUG_LOG_SYNTHESIZE("塞音声母处理完成");
 			break;
 		case phFRICATIVE:
-			// DEBUG_LOG_SYNTHESIZE("擦音声母: 代码=%d", p->ph->code);
+			DEBUG_LOG_SYNTHESIZE("擦音声母: 代码=%d", p->ph->code);
 			InterpretPhoneme(NULL, 0, p, phoneme_list, &phdata, &worddata);
 			LogPhonemeData("擦音声母", p, &phdata);
 
@@ -1385,7 +1385,7 @@ int Generate(PHONEME_LIST *phoneme_list, int *n_ph, bool resume)
 				DoSample3(&phdata, p->length, 0); // play it twice for [s:] etc.
 			}
 			DoSample3(&phdata, p->length, 0);
-			// DEBUG_LOG_SYNTHESIZE("擦音声母处理完成");
+			DEBUG_LOG_SYNTHESIZE("擦音声母处理完成");
 			break;
 		case phVSTOP:
 			// DEBUG_LOG_SYNTHESIZE("浊塞音声母");
@@ -1411,7 +1411,7 @@ int Generate(PHONEME_LIST *phoneme_list, int *n_ph, bool resume)
 
 			if ((prev->type == phVOWEL) || (ph->phflags & phPREVOICE)) {
 				// a period of voicing before the release
-				// DEBUG_LOG_SYNTHESIZE("浊塞音预发声: 代码=%d", p->ph->code);
+				DEBUG_LOG_SYNTHESIZE("浊塞音预发声: 代码=%d", p->ph->code);
 				InterpretPhoneme(NULL, 0x01, p, phoneme_list, &phdata, &worddata);
 				LogPhonemeData("浊塞音预发声", p, &phdata);
 				fmtp.fmt_addr = phdata.sound_addr[pd_FMT];
@@ -1433,7 +1433,7 @@ int Generate(PHONEME_LIST *phoneme_list, int *n_ph, bool resume)
 				StartSyllable();
 			} else
 				p->synthflags |= SFLAG_NEXT_PAUSE;
-			// DEBUG_LOG_SYNTHESIZE("浊塞音爆破释放: 代码=%d", p->ph->code);
+			DEBUG_LOG_SYNTHESIZE("浊塞音爆破释放: 代码=%d", p->ph->code);
 			InterpretPhoneme(NULL, 0, p, phoneme_list, &phdata, &worddata);
 			LogPhonemeData("浊塞音释放", p, &phdata);
 			fmtp.fmt_addr = phdata.sound_addr[pd_FMT];
@@ -1448,7 +1448,7 @@ int Generate(PHONEME_LIST *phoneme_list, int *n_ph, bool resume)
 				if (next->type == phFRICATIVE)
 					DoPause(12, 0);
 			}
-			// DEBUG_LOG_SYNTHESIZE("浊塞音声母处理完成");
+			DEBUG_LOG_SYNTHESIZE("浊塞音声母处理完成");
 			break;
 		case phVFRICATIVE:
 			DEBUG_LOG_SYNTHESIZE("🌊 开始处理浊擦音声母 (带声摩擦音)");
@@ -1469,7 +1469,7 @@ int Generate(PHONEME_LIST *phoneme_list, int *n_ph, bool resume)
 				StartSyllable();
 			else
 				p->synthflags |= SFLAG_NEXT_PAUSE;
-			// DEBUG_LOG_SYNTHESIZE("浊擦音频谱: 代码=%d", p->ph->code);
+			DEBUG_LOG_SYNTHESIZE("浊擦音频谱: 代码=%d", p->ph->code);
 			InterpretPhoneme(NULL, 0, p, phoneme_list, &phdata, &worddata);
 			LogPhonemeData("浊擦音声母", p, &phdata);
 			memset(&fmtp, 0, sizeof(fmtp));
@@ -1484,7 +1484,7 @@ int Generate(PHONEME_LIST *phoneme_list, int *n_ph, bool resume)
 				DoSpect2(p->ph, 0, &fmtp, p, 0);
 			}
 			DoSpect2(p->ph, 0, &fmtp, p, 0);
-			// DEBUG_LOG_SYNTHESIZE("浊擦音声母处理完成");
+			DEBUG_LOG_SYNTHESIZE("浊擦音声母处理完成");
 			break;
 		case phNASAL:
 			DEBUG_LOG_SYNTHESIZE("👃 开始处理鼻音声母 (鼻腔共鸣音)");
@@ -1497,7 +1497,7 @@ int Generate(PHONEME_LIST *phoneme_list, int *n_ph, bool resume)
 			if (prev->type == phNASAL)
 				last_frame = NULL;
 
-			// DEBUG_LOG_SYNTHESIZE("鼻音频谱: 代码=%d", p->ph->code);
+			DEBUG_LOG_SYNTHESIZE("鼻音频谱: 代码=%d", p->ph->code);
 			InterpretPhoneme(NULL, 0, p, phoneme_list, &phdata, &worddata);
 			LogPhonemeData("鼻音声母", p, &phdata);
 			fmtp.std_length = phdata.pd_param[i_SET_LENGTH]*2;
@@ -1505,21 +1505,21 @@ int Generate(PHONEME_LIST *phoneme_list, int *n_ph, bool resume)
 			fmtp.fmt_amp = phdata.sound_param[pd_FMT];
 
 			if (next->type == phVOWEL) {
-				// DEBUG_LOG_SYNTHESIZE("鼻音连接韵母，开始音节");
+				DEBUG_LOG_SYNTHESIZE("鼻音连接韵母，开始音节");
 				StartSyllable();
 				DoSpect2(p->ph, 0, &fmtp, p, 0);
 			} else if (prev->type == phVOWEL && (p->synthflags & SFLAG_SEQCONTINUE)) {
-				// DEBUG_LOG_SYNTHESIZE("鼻音跟随韵母");
+				DEBUG_LOG_SYNTHESIZE("鼻音跟随韵母");
 				DoSpect2(p->ph, 0, &fmtp, p, 0);
 			} else {
 				last_frame = NULL; // only for nasal ?
 				DoSpect2(p->ph, 0, &fmtp, p, 0);
 				last_frame = NULL;
 			}
-			// DEBUG_LOG_SYNTHESIZE("鼻音声母处理完成");
+			DEBUG_LOG_SYNTHESIZE("鼻音声母处理完成");
 			break;
 		case phLIQUID:
-			// DEBUG_LOG_SYNTHESIZE("处理流音");
+			DEBUG_LOG_SYNTHESIZE("处理流音");
 			memset(&fmtp, 0, sizeof(fmtp));
 			modulation = 0;
 			if (p->ph->phflags & phTRILL) {
@@ -1536,10 +1536,10 @@ int Generate(PHONEME_LIST *phoneme_list, int *n_ph, bool resume)
 				last_frame = NULL;
 
 			if (next->type == phVOWEL) {
-				// DEBUG_LOG_SYNTHESIZE("流音连接韵母，开始音节");
+				DEBUG_LOG_SYNTHESIZE("流音连接韵母，开始音节");
 				StartSyllable();
 			}
-			// DEBUG_LOG_SYNTHESIZE("流音频谱: 代码=%d", p->ph->code);
+			DEBUG_LOG_SYNTHESIZE("流音频谱: 代码=%d", p->ph->code);
 			InterpretPhoneme(NULL, 0, p, phoneme_list, &phdata, &worddata);
 			LogPhonemeData("流音", p, &phdata);
 
@@ -1551,17 +1551,17 @@ int Generate(PHONEME_LIST *phoneme_list, int *n_ph, bool resume)
 			fmtp.wav_addr = phdata.sound_addr[pd_ADDWAV];
 			fmtp.wav_amp = phdata.sound_param[pd_ADDWAV];
 			DoSpect2(p->ph, 0, &fmtp, p, modulation);
-			// DEBUG_LOG_SYNTHESIZE("流音处理完成");
+			DEBUG_LOG_SYNTHESIZE("流音处理完成");
 			break;
 		case phVOWEL:
-			// DEBUG_LOG_SYNTHESIZE("处理韵母");
+			DEBUG_LOG_SYNTHESIZE("🎵 开始处理韵母 (音节核心)");
 			ph = p->ph;
 			stress = p->stresslevel & 0xf;
-			// DEBUG_LOG_SYNTHESIZE("韵母重音级别: %d", stress);
+			DEBUG_LOG_SYNTHESIZE("韵母重音级别: %d", stress);
 
 			memset(&fmtp, 0, sizeof(fmtp));
 
-			// DEBUG_LOG_SYNTHESIZE("解析韵母音素数据: 代码=%d", p->ph->code);
+			DEBUG_LOG_SYNTHESIZE("解析韵母音素数据: 代码=%d", p->ph->code);
 			InterpretPhoneme(NULL, 0, p, phoneme_list, &phdata, &worddata);
 			LogPhonemeData("韵母(元音)", p, &phdata);
 			fmtp.std_length = phdata.pd_param[i_SET_LENGTH] * 2;
@@ -1639,7 +1639,7 @@ int Generate(PHONEME_LIST *phoneme_list, int *n_ph, bool resume)
 				DoPhonemeMarker(espeakEVENT_PHONEME, sourceix, 0, phoneme_name);
 			}
 
-			// DEBUG_LOG_SYNTHESIZE("处理韵母主体和结尾部分");
+			DEBUG_LOG_SYNTHESIZE("处理韵母主体和结尾部分");
 			fmtp.fmt_addr = phdata.sound_addr[pd_FMT];
 			fmtp.fmt_amp = phdata.sound_param[pd_FMT];
 			fmtp.transition0 = 0;

@@ -31,6 +31,9 @@
 #include <espeak-ng/speak_lib.h>
 #include <espeak-ng/encoding.h>
 
+// 调试日志宏定义
+#include "debug_log.h"
+
 #include "synthdata.h"
 #include "common.h"                    // for GetFileLength
 #include "error.h"                    // for create_file_error_context, crea...
@@ -762,6 +765,15 @@ void InterpretPhoneme(Translator *tr, int control, PHONEME_LIST *plist, PHONEME_
 	unsigned short *return_addr[N_RETURN]; // return address stack
 
 	ph = plist->ph;
+	
+	// 调试：显示音素解析开始信息
+	char mnem_buf[5];
+	mnem_buf[0] = (ph->mnemonic & 0xFF) ? (ph->mnemonic & 0xFF) : ' ';
+	mnem_buf[1] = ((ph->mnemonic >> 8) & 0xFF) ? ((ph->mnemonic >> 8) & 0xFF) : ' ';
+	mnem_buf[2] = ((ph->mnemonic >> 16) & 0xFF) ? ((ph->mnemonic >> 16) & 0xFF) : ' ';
+	mnem_buf[3] = ((ph->mnemonic >> 24) & 0xFF) ? ((ph->mnemonic >> 24) & 0xFF) : ' ';
+	mnem_buf[4] = 0;
+	DEBUG_LOG_SYNTHESIZE("🔍 开始解析音素数据: [%s] 代码=%d 程序地址=%d", mnem_buf, ph->code, ph->program);
 
 	if ((worddata != NULL) && (plist->sourceix)) {
 		// start of a word, reset word data
@@ -932,6 +944,33 @@ void InterpretPhoneme(Translator *tr, int control, PHONEME_LIST *plist, PHONEME_
 			instn2 = (instn >> 12) - 11;
 			phdata->sound_addr[instn2] = ((instn & 0xf) << 18) + (prog[1] << 2);
 			param_sc = phdata->sound_param[instn2] = (instn >> 4) & 0xff;
+			
+			// 调试：显示语音文件地址信息
+			const char* addr_type[] = {"FMT", "WAV", "VowelStart", "VowelEnd", "addWav"};
+			
+			// 获取当前音素的助记符
+			char phoneme_mnem[5];
+			const char* phoneme_name = "未知";
+			if (plist && plist->ph) {
+				phoneme_name = WordToString(phoneme_mnem, plist->ph->mnemonic);
+			}
+			
+			// 显示FMT名称（如果是FMT类型）
+			if (instn2 == 0) { // FMT
+				// 尝试从phondata中获取FMT序列信息
+				if (phdata->sound_addr[instn2] > 0 && phondata_ptr) {
+					SPECT_SEQ *seq = (SPECT_SEQ *)(&phondata_ptr[phdata->sound_addr[instn2]]);
+					DEBUG_LOG_SYNTHESIZE("📁 语音文件地址: %s 地址=0x%x 参数=%d 音素=[%s] 帧数=%d", 
+						addr_type[instn2], phdata->sound_addr[instn2], param_sc, phoneme_name, seq ? seq->n_frames : 0);
+				} else {
+					DEBUG_LOG_SYNTHESIZE("📁 语音文件地址: %s 地址=0x%x 参数=%d 音素=[%s]", 
+						addr_type[instn2], phdata->sound_addr[instn2], param_sc, phoneme_name);
+				}
+			} else {
+				DEBUG_LOG_SYNTHESIZE("📁 语音文件地址: %s 地址=0x%x 参数=%d 音素=[%s]", 
+					addr_type[instn2], phdata->sound_addr[instn2], param_sc, phoneme_name);
+			}
+			
 			prog++;
 
 			if (prog[1] != INSTN_CONTINUE) {
@@ -972,10 +1011,18 @@ void InterpretPhoneme(Translator *tr, int control, PHONEME_LIST *plist, PHONEME_
 	if (phdata->sound_addr[0] != 0) {
 		plist->phontab_addr = phdata->sound_addr[0]; // FMT address
 		plist->sound_param = phdata->sound_param[0];
+		DEBUG_LOG_SYNTHESIZE("✅ 选择FMT语音文件: 地址=0x%x 参数=%d 时长=%d", 
+			plist->phontab_addr, plist->sound_param, plist->std_length);
 	} else {
 		plist->phontab_addr = phdata->sound_addr[1]; // WAV address
 		plist->sound_param = phdata->sound_param[1];
+		DEBUG_LOG_SYNTHESIZE("✅ 选择WAV语音文件: 地址=0x%x 参数=%d 时长=%d", 
+			plist->phontab_addr, plist->sound_param, plist->std_length);
 	}
+	
+	// 调试：显示音素解析完成信息
+	DEBUG_LOG_SYNTHESIZE("🏁 音素数据解析完成: [%s] 最终时长=%d 语音地址=0x%x", 
+		mnem_buf, plist->std_length, plist->phontab_addr);
 }
 
 void InterpretPhoneme2(int phcode, PHONEME_DATA *phdata)
