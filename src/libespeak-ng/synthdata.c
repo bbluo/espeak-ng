@@ -773,7 +773,13 @@ void InterpretPhoneme(Translator *tr, int control, PHONEME_LIST *plist, PHONEME_
 	mnem_buf[2] = ((ph->mnemonic >> 16) & 0xFF) ? ((ph->mnemonic >> 16) & 0xFF) : ' ';
 	mnem_buf[3] = ((ph->mnemonic >> 24) & 0xFF) ? ((ph->mnemonic >> 24) & 0xFF) : ' ';
 	mnem_buf[4] = 0;
-	DEBUG_LOG_SYNTHESIZE("🔍 开始解析音素数据: [%s] 代码=%d 程序地址=%d", mnem_buf, ph->code, ph->program);
+	// 只为声母、韵母、声调相关音素输出调试信息
+	if (ph->type == phVOWEL || ph->type == phNASAL || ph->type == phFRICATIVE || ph->type == phSTOP) {
+		DEBUG_LOG_SYNTHESIZE("🔍 解析音素: [%s] 类型=%s 代码=%d", mnem_buf, 
+			ph->type == phVOWEL ? "韵母" : 
+			ph->type == phNASAL ? "鼻音" : 
+			ph->type == phFRICATIVE ? "擦音" : "塞音", ph->code);
+	}
 
 	if ((worddata != NULL) && (plist->sourceix)) {
 		// start of a word, reset word data
@@ -955,31 +961,9 @@ void InterpretPhoneme(Translator *tr, int control, PHONEME_LIST *plist, PHONEME_
 				phoneme_name = WordToString(phoneme_mnem, plist->ph->mnemonic);
 			}
 			
-			// 显示FMT名称（如果是FMT类型）
-			if (instn2 == 0) { // FMT
-				// 尝试从phondata中获取FMT序列信息
-				if (phdata->sound_addr[instn2] > 0 && phondata_ptr) {
-					SPECT_SEQ *seq = (SPECT_SEQ *)(&phondata_ptr[phdata->sound_addr[instn2]]);
-					DEBUG_LOG_SYNTHESIZE("📁 语音文件地址: %s 地址=0x%x 参数=%d 音素=[%s] 帧数=%d", 
-						addr_type[instn2], phdata->sound_addr[instn2], param_sc, phoneme_name, seq ? seq->n_frames : 0);
-				} else {
-					DEBUG_LOG_SYNTHESIZE("📁 语音文件地址: %s 地址=0x%x 参数=%d 音素=[%s]", 
-						addr_type[instn2], phdata->sound_addr[instn2], param_sc, phoneme_name);
-				}
-			} else { // WAV, VowelStart, VowelEnd, addWav
-				// 尝试获取WAV数据的详细信息
-				if (phdata->sound_addr[instn2] > 0 && phondata_ptr) {
-					unsigned char *wav_data = &phondata_ptr[phdata->sound_addr[instn2]];
-					int wav_length = (wav_data[1] * 256) + wav_data[0]; // 长度（字节）
-					int wav_scale = wav_data[2]; // 缩放因子
-					const char* wav_format = (wav_scale == 0) ? "16位" : "8位";
-					
-					DEBUG_LOG_SYNTHESIZE("📁 语音文件地址: %s 地址=0x%x 参数=%d 音素=[%s]", 
-						addr_type[instn2], phdata->sound_addr[instn2], param_sc, phoneme_name);
-				} else {
-					DEBUG_LOG_SYNTHESIZE("📁 语音文件地址: %s 地址=0x%x 参数=%d 音素=[%s]", 
-						addr_type[instn2], phdata->sound_addr[instn2], param_sc, phoneme_name);
-				}
+			// 简化语音文件信息，只显示关键音素类型
+			if (plist && (plist->ph->type == phVOWEL || plist->ph->type == phNASAL || plist->ph->type == phFRICATIVE || plist->ph->type == phSTOP)) {
+				DEBUG_LOG_SYNTHESIZE("📁 音素[%s] 使用%s文件", phoneme_name, addr_type[instn2]);
 			}
 			
 			prog++;
@@ -1031,9 +1015,10 @@ void InterpretPhoneme(Translator *tr, int control, PHONEME_LIST *plist, PHONEME_
 			plist->phontab_addr, plist->sound_param, plist->std_length);
 	}
 	
-	// 调试：显示音素解析完成信息
-	DEBUG_LOG_SYNTHESIZE("🏁 音素数据解析完成: [%s] 最终时长=%d 语音地址=0x%x", 
-		mnem_buf, plist->std_length, plist->phontab_addr);
+	// 只为关键音素显示解析完成信息
+	if (plist->ph && (plist->ph->type == phVOWEL || plist->ph->type == phNASAL || plist->ph->type == phFRICATIVE || plist->ph->type == phSTOP)) {
+		DEBUG_LOG_SYNTHESIZE("🏁 音素[%s]解析完成 时长=%d", mnem_buf, plist->std_length);
+	}
 }
 
 void InterpretPhoneme2(int phcode, PHONEME_DATA *phdata)

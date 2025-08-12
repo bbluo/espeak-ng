@@ -1334,10 +1334,11 @@ static int WavegenFill2(void)
 			DEBUG_LOG_WAVEGEN("音素频谱处理2 - 停止并发音频文件");
 			wdata.n_mix_wavefile = 0; // ... and drop through to WCMD_SPECT case
 		case WCMD_SPECT:
-			DEBUG_LOG_WAVEGEN("音素频谱处理 - 长度: %d, 调制: %ld, frame1: %p, frame2: %p", length & 0xffff, q[1] >> 16, (void*)q[2], (void*)q[3]);
-			echo_complete = echo_length;
-			result = Wavegen(length & 0xffff, q[1] >> 16, resume, (frame_t *)q[2], (frame_t *)q[3], wvoice);
-			DEBUG_LOG_WAVEGEN("音素频谱处理完成 - 结果: %d", result);
+			// 完全移除重复的频谱处理日志
+			// 频谱处理过程无需重复输出
+		echo_complete = echo_length;
+		result = Wavegen(length & 0xffff, q[1] >> 16, resume, (frame_t *)q[2], (frame_t *)q[3], wvoice);
+		// 移除重复的处理完成日志
 			break;
 #if USE_KLATT
 		case WCMD_KLATT2: // as WCMD_SPECT but stop any concurrent wave file
