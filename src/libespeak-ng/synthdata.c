@@ -966,9 +966,20 @@ void InterpretPhoneme(Translator *tr, int control, PHONEME_LIST *plist, PHONEME_
 					DEBUG_LOG_SYNTHESIZE("📁 语音文件地址: %s 地址=0x%x 参数=%d 音素=[%s]", 
 						addr_type[instn2], phdata->sound_addr[instn2], param_sc, phoneme_name);
 				}
-			} else {
-				DEBUG_LOG_SYNTHESIZE("📁 语音文件地址: %s 地址=0x%x 参数=%d 音素=[%s]", 
-					addr_type[instn2], phdata->sound_addr[instn2], param_sc, phoneme_name);
+			} else { // WAV, VowelStart, VowelEnd, addWav
+				// 尝试获取WAV数据的详细信息
+				if (phdata->sound_addr[instn2] > 0 && phondata_ptr) {
+					unsigned char *wav_data = &phondata_ptr[phdata->sound_addr[instn2]];
+					int wav_length = (wav_data[1] * 256) + wav_data[0]; // 长度（字节）
+					int wav_scale = wav_data[2]; // 缩放因子
+					const char* wav_format = (wav_scale == 0) ? "16位" : "8位";
+					
+					DEBUG_LOG_SYNTHESIZE("📁 语音文件地址: %s 地址=0x%x 参数=%d 音素=[%s]", 
+						addr_type[instn2], phdata->sound_addr[instn2], param_sc, phoneme_name);
+				} else {
+					DEBUG_LOG_SYNTHESIZE("📁 语音文件地址: %s 地址=0x%x 参数=%d 音素=[%s]", 
+						addr_type[instn2], phdata->sound_addr[instn2], param_sc, phoneme_name);
+				}
 			}
 			
 			prog++;
