@@ -35,6 +35,7 @@
 #include "debug_log.h"
 
 #include "synthdata.h"
+extern char path_home[]; // 声明外部变量以获取语音数据路径
 #include "common.h"                    // for GetFileLength
 #include "error.h"                    // for create_file_error_context, crea...
 #include "phoneme.h"                  // for PHONEME_TAB, PHONEME_TAB_LIST
@@ -961,9 +962,13 @@ void InterpretPhoneme(Translator *tr, int control, PHONEME_LIST *plist, PHONEME_
 				phoneme_name = WordToString(phoneme_mnem, plist->ph->mnemonic);
 			}
 			
-			// 简化语音文件信息，只显示关键音素类型
+			// 显示语音文件详细信息
 			if (plist && (plist->ph->type == phVOWEL || plist->ph->type == phNASAL || plist->ph->type == phFRICATIVE || plist->ph->type == phSTOP)) {
-				DEBUG_LOG_SYNTHESIZE("📁 音素[%s] 使用%s文件", phoneme_name, addr_type[instn2]);
+				if (phdata->sound_addr[instn2] == 0) {
+					DEBUG_LOG_SYNTHESIZE("⚠️  音素[%s] %s文件地址=0x0 (无语音数据，可能缺少phondata文件)", phoneme_name, addr_type[instn2]);
+				} else {
+					DEBUG_LOG_SYNTHESIZE("📁 音素[%s] %s文件地址=0x%x (数据路径:%s)", phoneme_name, addr_type[instn2], phdata->sound_addr[instn2], path_home);
+				}
 			}
 			
 			prog++;
@@ -1011,13 +1016,22 @@ void InterpretPhoneme(Translator *tr, int control, PHONEME_LIST *plist, PHONEME_
 	} else {
 		plist->phontab_addr = phdata->sound_addr[1]; // WAV address
 		plist->sound_param = phdata->sound_param[1];
-		DEBUG_LOG_SYNTHESIZE("✅ 选择WAV语音文件: 地址=0x%x 参数=%d 时长=%d", 
-			plist->phontab_addr, plist->sound_param, plist->std_length);
+		if (plist->phontab_addr == 0) {
+			DEBUG_LOG_SYNTHESIZE("❌ WAV语音文件: 地址=0x0 (无可用语音数据) 参数=%d 时长=%d", 
+				plist->sound_param, plist->std_length);
+		} else {
+			DEBUG_LOG_SYNTHESIZE("✅ 选择WAV语音文件: 地址=0x%x 参数=%d 时长=%d", 
+				plist->phontab_addr, plist->sound_param, plist->std_length);
+		}
 	}
 	
-	// 只为关键音素显示解析完成信息
+	// 显示音素解析完成信息，包括语音文件状态
 	if (plist->ph && (plist->ph->type == phVOWEL || plist->ph->type == phNASAL || plist->ph->type == phFRICATIVE || plist->ph->type == phSTOP)) {
-		DEBUG_LOG_SYNTHESIZE("🏁 音素[%s]解析完成 时长=%d", mnem_buf, plist->std_length);
+		if (plist->phontab_addr == 0) {
+			DEBUG_LOG_SYNTHESIZE("🏁 音素[%s]解析完成 时长=%d ⚠️无语音数据", mnem_buf, plist->std_length);
+		} else {
+			DEBUG_LOG_SYNTHESIZE("🏁 音素[%s]解析完成 时长=%d ✅有语音数据", mnem_buf, plist->std_length);
+		}
 	}
 }
 

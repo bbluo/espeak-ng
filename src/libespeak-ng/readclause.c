@@ -468,7 +468,7 @@ static int CheckPhonemeMode(int option_phoneme_input, int phoneme_mode, int c1, 
 
 int ReadClause(Translator *tr, char *buf, short *charix, int *charix_top, int n_buf, int *tone_type, char *voice_change)
 {
-	DEBUG_LOG_READCLAUSE("ReadClause开始 - translator: %p, n_buf: %d", tr, n_buf);
+
 	
 	/* Find the end of the current clause.
 	    Write the clause into  buf
