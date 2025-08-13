@@ -21,6 +21,8 @@ static inline int is_debug_enabled(const char* module) {
     static int translate_enabled = 0;
     static int speech_checked = 0;
     static int speech_enabled = 0;
+    static int intonation_checked = 0;
+    static int intonation_enabled = 0;
     
     // 检查全局调试开关
     if (!global_checked) {
@@ -56,6 +58,14 @@ static inline int is_debug_enabled(const char* module) {
             speech_checked = 1;
         }
         return speech_enabled;
+    } else if (strcmp(module, "INTONATION") == 0) {
+        if (!intonation_checked) {
+            const char *env = getenv("ESPEAK_DEBUG_INTONATION");
+            // 默认启用INTONATION日志，除非明确禁用
+            intonation_enabled = !(env && (strcmp(env, "false") == 0 || strcmp(env, "FALSE") == 0 || strcmp(env, "0") == 0));
+            intonation_checked = 1;
+        }
+        return intonation_enabled;
     }
     
     // 其他模块默认启用

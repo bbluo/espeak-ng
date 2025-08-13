@@ -988,10 +988,13 @@ void CalcPitches(Translator *tr, int clause_type)
 	if (n_st == 0)
 		return; // nothing to do
 
+	DEBUG_LOG_INTONATION("检查声调语言标志: tone_language=%d", tr->langopts.tone_language);
 	if (tr->langopts.tone_language == 1) {
+		DEBUG_LOG_INTONATION("进入声调语言模式，调用CalcPitches_Tone");
 		CalcPitches_Tone(tr);
 		return;
 	}
+	DEBUG_LOG_INTONATION("使用标准语调模式，不是声调语言");
 
 	option = tr->langopts.intonation_group;
 	if (option >= INTONATION_TYPES)

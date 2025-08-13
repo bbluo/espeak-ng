@@ -28,6 +28,7 @@
 #include <string.h>
 
 #include <espeak-ng/espeak_ng.h>
+#include "debug_log.h"
 #include <espeak-ng/speak_lib.h>
 #include <espeak-ng/encoding.h>
 
@@ -489,6 +490,8 @@ Translator *SelectTranslator(const char *name)
 	// convert name string into a word of up to 4 characters, for the switch()
 	while (*name != 0)
 		name2 = (name2 << 8) + *name++;
+
+	DEBUG_LOG_INTONATION("SelectTranslator: 语言名称='%s', 转换后的name2=0x%x", tr->dictionary_name, name2);
 
 	switch (name2)
 	{
@@ -1612,6 +1615,7 @@ Translator *SelectTranslator(const char *name)
 		tr->langopts.word_gap = 0x21; // length of a final vowel is less dependent on the next consonant, don't merge consonant with next word
 		tr->letter_groups[0] = tr->letter_groups[7] = vowels_vi;
 		tr->langopts.tone_language = 1; // Tone language, use  CalcPitches_Tone() rather than CalcPitches()
+		DEBUG_LOG_INTONATION("已设置tone_language=1");
 		tr->langopts.unstressed_wd1 = 2;
 		tr->langopts.numbers = NUM_DECIMAL_COMMA | NUM_HUNDRED_AND_DIGIT | NUM_DFRACTION_4 | NUM_ZERO_HUNDRED;
 
@@ -1628,11 +1632,15 @@ Translator *SelectTranslator(const char *name)
 		break;
 	case L3('s', 'h', 'n'):
 		tr->langopts.tone_language = 1; // Tone language, use  CalcPitches_Tone() rather than CalcPitches()
+		DEBUG_LOG_INTONATION("中文语言已设置tone_language=1");
 		tr->langopts.length_mods0 = tr->langopts.length_mods; // don't lengthen vowels in the last syllable
 		tr->langopts.numbers = NUM_DEFAULT;
 		tr->langopts.break_numbers = BREAK_INDIVIDUAL;
 		break;
+	case 0x6875616e: // wuchuan (full name converted to hex) - use same handling as other Chinese variants
+		DEBUG_LOG_INTONATION("识别到wuchuan语言(完整名称)，设置为声调语言");
 	case L3('w', 'u', 'c'): // wuchuan - use same handling as other Chinese variants
+		DEBUG_LOG_INTONATION("识别到wuchuan语言，设置为声调语言");
 	case L3('c', 'm', 'n'): // no break, just go to 'zh' case
 	case L3('y', 'u', 'e'):
 	case L('z','h'):	// zh is used for backwards compatibility. Prefer cmn or yue.
@@ -1646,6 +1654,7 @@ Translator *SelectTranslator(const char *name)
 		tr->langopts.stress_flags = S_NO_DIM; // don't automatically set diminished stress (may be set in the intonation module)
 		tr->langopts.vowel_pause = 0;
 		tr->langopts.tone_language = 1; // Tone language, use  CalcPitches_Tone() rather than CalcPitches()
+		DEBUG_LOG_INTONATION("wuchuan语言已设置tone_language=1");
 		tr->langopts.length_mods0 = tr->langopts.length_mods; // don't lengthen vowels in the last syllable
 		tr->langopts.tone_numbers = 1; // a number after letters indicates a tone number (eg. pinyin or jyutping)
 		tr->langopts.ideographs = 1;

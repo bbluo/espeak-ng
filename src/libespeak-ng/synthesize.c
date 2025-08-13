@@ -1717,7 +1717,9 @@ int SpeakNextClause(int control)
 	// entries in the wavegen command queue
 	TranslateClause(translator, &clause_tone, &voice_change);
 
+	DEBUG_LOG_INTONATION("准备调用CalcPitches: 语言=0x%x, 子句声调=%d", translator->translator_name, clause_tone);
 	CalcPitches(translator, clause_tone);
+	DEBUG_LOG_INTONATION("CalcPitches调用完成");
 	CalcLengths(translator);
 
 	if ((option_phonemes & 0xf) || (phoneme_callback != NULL)) {
