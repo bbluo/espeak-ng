@@ -11,15 +11,59 @@
 #endif
 
 #if DEBUG_LOG_ENABLED
+// 检查特定模块是否启用调试
+static inline int is_debug_enabled(const char* module) {
+    static int global_checked = 0;
+    static int global_enabled = 0;
+    static int synthesize_checked = 0;
+    static int synthesize_enabled = 0;
+    static int translate_checked = 0;
+    static int translate_enabled = 0;
+    static int speech_checked = 0;
+    static int speech_enabled = 0;
+    
+    // 检查全局调试开关
+    if (!global_checked) {
+        const char *env = getenv("ESPEAK_DEBUG");
+        global_enabled = (env && (strcmp(env, "true") == 0 || strcmp(env, "TRUE") == 0 || strcmp(env, "1") == 0));
+        global_checked = 1;
+    }
+    
+    if (!global_enabled) return 0;
+    
+    // 检查模块特定的调试开关
+    if (strcmp(module, "SYNTHESIZE") == 0) {
+        if (!synthesize_checked) {
+            const char *env = getenv("ESPEAK_DEBUG_SYNTHESIZE");
+            // 默认关闭SYNTHESIZE详细日志，除非明确启用
+            synthesize_enabled = (env && (strcmp(env, "true") == 0 || strcmp(env, "TRUE") == 0 || strcmp(env, "1") == 0));
+            synthesize_checked = 1;
+        }
+        return synthesize_enabled;
+    } else if (strcmp(module, "TRANSLATE") == 0) {
+        if (!translate_checked) {
+            const char *env = getenv("ESPEAK_DEBUG_TRANSLATE");
+            // 默认启用TRANSLATE日志，除非明确禁用
+            translate_enabled = !(env && (strcmp(env, "false") == 0 || strcmp(env, "FALSE") == 0 || strcmp(env, "0") == 0));
+            translate_checked = 1;
+        }
+        return translate_enabled;
+    } else if (strcmp(module, "SPEECH") == 0) {
+        if (!speech_checked) {
+            const char *env = getenv("ESPEAK_DEBUG_SPEECH");
+            // 默认启用SPEECH日志，除非明确禁用
+            speech_enabled = !(env && (strcmp(env, "false") == 0 || strcmp(env, "FALSE") == 0 || strcmp(env, "0") == 0));
+            speech_checked = 1;
+        }
+        return speech_enabled;
+    }
+    
+    // 其他模块默认启用
+    return 1;
+}
+
 #define DEBUG_LOG(module, fmt, ...) do { \
-    static int debug_checked = 0; \
-    static int debug_enabled = 0; \
-    if (!debug_checked) { \
-        const char *env = getenv("ESPEAK_DEBUG"); \
-        debug_enabled = (env && (strcmp(env, "true") == 0 || strcmp(env, "TRUE") == 0 || strcmp(env, "1") == 0)); \
-        debug_checked = 1; \
-    } \
-    if (debug_enabled) { \
+    if (is_debug_enabled(module)) { \
         fprintf(stderr, "[DEBUG-%s] %s:%d: ", module, __FILE__, __LINE__); \
         fprintf(stderr, fmt, ##__VA_ARGS__); \
         fprintf(stderr, "\n"); \
