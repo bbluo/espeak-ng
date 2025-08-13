@@ -6,7 +6,7 @@
 
 .L01 a â e o i u ê    // 元音
 .L02 b p m f dh d t n l z c s j q nj x rd g k ng h gu ku hg  // 声母（不包括半元音y,w）
-.L03 a â e o i u ê ai au am ang ab ag âi âu âm âng âb âg e ei em eng eb eg o oi om ong ob og i iu im ing ib ig u ui um ung ub ug ê êi êm êng êb êg  // 韵母
+.L03 a ai au am ang ab ag âi âu âm âng âb âg ei en ed ê o ou ong og oai oau oam oang oab oag i iu im ing ib ig iam iang iab iag iau u ui un ud  // 韵母
 
 // 注意：以下韵母规则需要根据声调表.txt中的实际拼音方案进行验证和调整
 // 某些韵母组合可能不存在或拼写方式不同
