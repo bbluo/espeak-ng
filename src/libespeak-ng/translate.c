@@ -48,6 +48,9 @@
 #include "speech.h"               // for MAKE_MEM_UNDEFINED
 #include "translateword.h"
 
+// 声明WordToString函数用于音素助记符转换
+extern const char *WordToString(char buf[5], unsigned int word);
+
 static int CalcWordLength(int source_index, int charix_top, short int *charix, WORD_TAB *words, int word_count);
 static void CombineFlag(Translator *tr, WORD_TAB *wtab, char *word, int *flags, unsigned char *p, char *word_phonemes);
 static void SwitchLanguage(char *word, char *word_phonemes);
@@ -604,13 +607,25 @@ static int TranslateWord2(Translator *tr, char *word, WORD_TAB *wtab, int pre_pa
 				DEBUG_LOG_TRANSLATE("🎯 设置重音: %s (级别%d)", stress_desc, next_stress);
 			} else {
 				// for tone languages, the tone number for a syllable follows the vowel
-				if (prev_vowel >= 0) {
-					ph_list2[prev_vowel].tone_ph = ph_code;
-					DEBUG_LOG_TRANSLATE("🎵 设置声调: 代码=%d", ph_code);
-				} else {
-					next_tone = ph_code; // no previous vowel, apply to the next vowel
-					DEBUG_LOG_TRANSLATE("🎵 预设声调: 代码=%d", ph_code);
+			if (prev_vowel >= 0) {
+				ph_list2[prev_vowel].tone_ph = ph_code;
+				char mnem_buf[5];
+				const char* tone_name = "未知声调";
+				if (ph_code < N_PHONEME_TAB && phoneme_tab[ph_code] != NULL) {
+					WordToString(mnem_buf, phoneme_tab[ph_code]->mnemonic);
+					tone_name = mnem_buf;
 				}
+				DEBUG_LOG_TRANSLATE("🎵 设置声调: 代码=%d (%s) 到音素索引=%d", ph_code, tone_name, prev_vowel);
+			} else {
+				next_tone = ph_code; // no previous vowel, apply to the next vowel
+				char mnem_buf[5];
+				const char* tone_name = "未知声调";
+				if (ph_code < N_PHONEME_TAB && phoneme_tab[ph_code] != NULL) {
+					WordToString(mnem_buf, phoneme_tab[ph_code]->mnemonic);
+					tone_name = mnem_buf;
+				}
+				DEBUG_LOG_TRANSLATE("🎵 预设声调: 代码=%d (%s)", ph_code, tone_name);
+			}
 			}
 		} else if (ph_code == phonSYLLABIC) {
 			// mark the previous phoneme as a syllabic consonant
@@ -648,7 +663,13 @@ static int TranslateWord2(Translator *tr, char *word, WORD_TAB *wtab, int pre_pa
 				case phPAUSE: ph_type_name = "停顿"; break;
 				default: ph_type_name = "其他"; break;
 			}
-			DEBUG_LOG_TRANSLATE("➕ 添加音素: %s (代码%d)", ph_type_name, ph_code);
+			char mnem_buf[5];
+			const char* phoneme_name = "未知";
+			if (ph != NULL && ph->mnemonic != 0) {
+				WordToString(mnem_buf, ph->mnemonic);
+				phoneme_name = mnem_buf;
+			}
+			DEBUG_LOG_TRANSLATE("➕ 添加音素: %s [%s] (代码%d)", ph_type_name, phoneme_name, ph_code);
 
 			if (ph->type == phVOWEL) {
 				stress = next_stress;

@@ -2090,8 +2090,6 @@ int TranslateRules(Translator *tr, char *p_start, char *phonemes, int ph_size, c
 	/* Translate a word bounded by space characters
 	   Append the result to 'phonemes' and any standard prefix/suffix in 'end_phonemes' */
 
-	DEBUG_LOG_DICTIONARY("开始字典规则翻译: 输入='%s', 单词标志=0x%x", p_start, word_flags);
-	
 	unsigned char c, c2;
 	unsigned int c12;
 	int wc = 0;
@@ -2149,21 +2147,13 @@ int TranslateRules(Translator *tr, char *p_start, char *phonemes, int ph_size, c
 
 	while (((c = *p) != ' ') && (c != 0)) {
 		int wc_bytes = utf8_in(&wc, p);
-		DEBUG_LOG_DICTIONARY("处理字符: 0x%x (%c), UTF-8字节数: %d", wc, (wc >= 32 && wc < 127) ? wc : '?', wc_bytes);
-		
-		// 检测中文字符范围 (CJK统一汉字)
-		if (wc >= 0x4E00 && wc <= 0x9FFF) {
-			DEBUG_LOG_DICTIONARY("检测到中文字符: 0x%x, UTF-8字节: %d", wc, wc_bytes);
-		}
 		
 		if (IsAlpha(wc)) {
 			any_alpha++;
-			DEBUG_LOG_DICTIONARY("检测到字母字符，字母计数: %d", any_alpha);
 		}
 
 		int n = tr->groups2_count[c];
 		if (IsDigit(wc) && ((tr->langopts.tone_numbers == 0) || !any_alpha)) {
-			DEBUG_LOG_DICTIONARY("处理数字字符: %c", wc);
 			// lookup the number in *_list not *_rules
 			char string[8];
 			char buf[40];
@@ -2739,7 +2729,6 @@ static const char *LookupDict2(Translator *tr, const char *word, const char *wor
  */
 int LookupDictList(Translator *tr, char **wordptr, char *ph_out, unsigned int *flags, int end_flags, WORD_TAB *wtab)
 {
-	DEBUG_LOG_DICTIONARY("LookupDictList: wordptr='%s', end_flags=%d, translator=%p", wordptr && *wordptr ? *wordptr : "(null)", end_flags, (void*)tr);
 	int length;
 	const char *found;
 	const char *word1;
@@ -2754,7 +2743,6 @@ int LookupDictList(Translator *tr, char **wordptr, char *ph_out, unsigned int *f
 
 	length = 0;
 	word2 = word1 = *wordptr;
-	DEBUG_LOG_DICTIONARY("LookupDictList: word1='%s', word2='%s'", word1 ? word1 : "(null)", word2 ? word2 : "(null)");
 
 	while ((word2[nbytes = utf8_nbytes(word2)] == ' ') && (word2[nbytes+1] == '.')) {
 		// look for an abbreviation of the form a.b.c
