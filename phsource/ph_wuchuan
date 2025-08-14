@@ -343,9 +343,8 @@ phoneme g
 
   // 检查前一个音素是否为韵母，如果是则静音处理
   IF prevPh(isVowel) THEN
-    // 前面有韵母时不发声，作为后鼻音处理
-    length 0
-    // 使用静音处理
+    // 前面有韵母时完全静音，使用NULL波形
+    WAV(NULL)
   ELSE
     // 正常的g音素发声
     IF PreVoicing THEN
@@ -390,6 +389,29 @@ phoneme ng   // synonym for [N]
     ChangePhoneme(N)
   ENDIF
   ChangePhoneme(N)
+endphoneme
+
+//====================================================
+//  k音素处理 - 前面有韵母时不发声
+//====================================================
+
+phoneme k
+  vls vel stp
+  lengthmod 2
+  Vowelin f1=0  f2=2300 200 300  f3=-200 80
+  Vowelout f1=1  f2=2300 300 400  f3=-200 80 rms=20
+
+  // 检查前一个音素是否为韵母，如果是则静音处理
+  IF prevPh(isVowel) THEN
+    // 前面有韵母时完全静音，使用NULL波形
+    WAV(NULL)
+  ELSE
+    // 正常的k音素发声
+    IF nextPh(isPause2) THEN
+      WAV(ustop/k_)
+    ENDIF
+    WAV(ustop/k)
+  ENDIF
 endphoneme
 
 //====================================================

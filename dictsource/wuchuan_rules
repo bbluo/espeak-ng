@@ -27,7 +27,7 @@
         âm            Am    // 瘖 [Am] - 韵母表中存在
         âng           AN    // 因 [Aŋ] - 韵母表中存在
         âb            Ap    // 急 [Ap] - 韵母表中为âb，但实际音标是[up]
-        âg            Ak    // 忽 [Ak] - 韵母表中为âg，但实际音标是[æk]
+        âg            Ak    // 忽 [Ak]
 
 .group e
         ei            eI    // 医 [ei]
@@ -47,7 +47,7 @@
         oam           wam   // 庵 [uam] - 韵母表中为oam
         oang          waN   // 安 [uaŋ] - 韵母表中为oang
         oab           wap   // 合 [uap] - 韵母表中为oab
-        oag           wak   // 恶 [uak] - 韵母表中为oag
+        oag           wak   // 恶 [uak]
 
 .group i
         i             i     // 支 [i]
@@ -55,11 +55,11 @@
         im            im    // 阉 [im]
         ing           iN    // 烟 [iŋ]
         ib            ip    // 腌 [ip]
-        ig            ik    // 乙 [ik]
+        ig            ik    // 益 [ik]
         iam           iam   // 钳 [iam] - 韵母表中存在
         iang          iaN   // 枪 [iaŋ] - 韵母表中存在
         iab           iap   // 挟 [iap] - 韵母表中存在
-        iag           iak   // 略 [iak] - 韵母表中存在
+        iag           iak   // 略 [iak]
         iau           iaU   // 猫 [iau] - 韵母表中存在
          
 .group u
@@ -123,7 +123,6 @@
 
 .group g
         gu            kw    // 姑 [kw]
-        L03) g        _     // 韵母后的g静音处理（包括â等所有韵母）
         g             g     // 哥 [k] - 其他情况正常发音
 
 .group k
