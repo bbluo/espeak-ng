@@ -337,7 +337,6 @@ endphoneme
 
 phoneme g
   vcd vel stp
-  voicingswitch k
   lengthmod 5
   Vowelin f1=2  f2=2300 200 300  f3=-300 80
   Vowelout f1=2  f2=2300 250 300  f3=-300 80 brk
@@ -378,6 +377,19 @@ phoneme p
     WAV(ustop/pl)
   ENDIF
   WAV(ustop/p)
+endphoneme
+
+//====================================================
+//  N音素 - ng鼻音韵尾
+//====================================================
+
+phoneme ng   // synonym for [N]
+  vwl
+  length 350
+  IF nextPh(isVowel) THEN
+    ChangePhoneme(N)
+  ENDIF
+  ChangePhoneme(N)
 endphoneme
 
 //====================================================
