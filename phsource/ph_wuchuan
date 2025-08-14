@@ -20,7 +20,7 @@ endphoneme
 
 phoneme 3   //  阴上 24 (低升调)
   stress
-  Tone(24, 42, envelope/p_rise, NULL)
+  Tone(24, 24, envelope/p_level, NULL)
 endphoneme
 
 phoneme 4   //  阳上 33 (中平调)
@@ -35,7 +35,7 @@ endphoneme
 
 phoneme 6   //  阳去 22 (低平调)
   stress
-  Tone(20, 20, envelope/p_level, NULL)
+  Tone(22, 22, envelope/p_level, NULL)
 endphoneme
 
 phoneme 7   //  上阴入 4 (高短调)
